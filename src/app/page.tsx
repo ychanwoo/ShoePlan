@@ -1,5 +1,5 @@
-import TabBar from "@/components/common/TabBar";
+import SplashScreen from "./(splash)/SplashScreen";
 
-export default function Home() {
-  return <TabBar />;
+export default function RootPage() {
+  return <SplashScreen />;
 }
