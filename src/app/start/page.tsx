@@ -19,7 +19,7 @@ export default function StartPage() {
       </div>
 
       <div className="flex justify-center pt-[25vh]">
-        <MainBtn href="/login">교체 타이밍 확인하기 →</MainBtn>
+        <MainBtn href="/steps">교체 타이밍 확인하기 →</MainBtn>
       </div>
     </>
   );
