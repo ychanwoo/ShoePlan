@@ -74,7 +74,7 @@ export default function StepOnePage({ onNext }: StepNavigationProps) {
       </div>
 
       {/* Next 버튼 */}
-      <div className="relative top-37 left-70">
+      <div className="absolute bottom-13 left-0 right-0 flex justify-end px-8">
         <NextBtn onClick={onNext}>Next →</NextBtn>
       </div>
 

@@ -63,7 +63,7 @@ export default function StepThreePage({ onNext, onPrev }: StepNavigationProps) {
       </div>
 
       {/* 버튼 영역 - 화면 하단에 좌우 배치 */}
-      <div className="mt-37 flex justify-between px-8">
+      <div className="absolute bottom-13 left-0 right-0 flex justify-between px-8">
         <PrevBtn onClick={onPrev}>← Prev</PrevBtn>
         <NextBtn onClick={onNext}>Next →</NextBtn>
       </div>
