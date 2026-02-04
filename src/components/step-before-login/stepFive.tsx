@@ -61,7 +61,7 @@ export default function StepFivePage({ onNext, onPrev }: StepNavigationProps) {
       {/* 버튼 영역 - 화면 하단에 좌우 배치 */}
       <div className="absolute bottom-13 left-0 right-0 flex justify-between px-8">
         <PrevBtn onClick={onPrev}>← Prev</PrevBtn>
-        <Link href="/start" className="text-sm">
+        <Link href="/steps/preview" className="text-sm">
           <NextBtn onClick={onNext}>결과보기</NextBtn>
         </Link>
       </div>
