@@ -1,11 +1,14 @@
 "use client";
 
+import HeaderBar from "@/components/common/HeaderBar";
 import TabBar from "@/components/common/TabBar";
 import ShoeLifeProgress from "@/components/homeTab/ShoeLifeProgress";
 
 export default function HomePage() {
   return (
     <>
+      <HeaderBar title="Home" showInfo />
+
       <div className="flex flex-col items-center relative top-45">
         <ShoeLifeProgress percentage={72} />
       </div>
