@@ -12,9 +12,9 @@ export interface HeaderBarProps {
 export default function HeaderBar({ title, showInfo }: HeaderBarProps) {
   const router = useRouter();
   return (
-    <header className="w-full relative top-5">
+    <header className="w-full h-[11vh] relative top-5">
       {/* 상단 바 */}
-      <div className="flex items-center justify-between h-14 px-4 text-[#CBD5E1]">
+      <div className="flex items-center justify-between px-4 h-14 text-[#CBD5E1]">
         {/* 왼족 */}
         <div className="flex items-center">
           <button

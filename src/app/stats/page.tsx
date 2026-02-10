@@ -28,7 +28,7 @@ export default function StatsPage() {
       <HeaderBar title="Stats" />
 
       {/* Running modify */}
-      <main className="space-y-5 relative top-13">
+      <div className="space-y-5 pt-5 h-[calc(100vh-11vh)] overflow-y-scroll">
         <div className="text-[#CBD5E1] bg-[#242E35] w-75 h-55 mx-auto pt-3 font-light rounded-2xl">
           <h2 className="text-xl ml-5 pb-3">Running</h2>
           {/* distance 선택 */}
@@ -43,7 +43,7 @@ export default function StatsPage() {
             </button>
           </div>
 
-          {/* cycle 선택 */}
+          {/* type 선택 */}
           <div className="ml-5 pt-6 flex flex-col gap-y-2 w-75 text-[#CBD5E1]">
             <span>Running Type</span>
             <button
@@ -122,11 +122,11 @@ export default function StatsPage() {
         <div
           className="w-20 h-8.5 bg-[#1E7F4F] hover:bg-[#1e7f4ece] rounded-2xl text-white
             flex justify-center
-            relative left-70 top-3 font-light"
+            relative left-70 top-3 font-light mb-30"
         >
           <button>Save</button>
         </div>
-      </main>
+      </div>
 
       <TabBar />
 
