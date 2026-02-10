@@ -9,6 +9,16 @@ body {
   height: 100vh;
 }
 
+/* 전역으로 적용 (이것만 해도 바로 보임) */
+.swiper {
+  --swiper-pagination-bullet-inactive-color: #64748b;
+  --swiper-pagination-color: #1e7f4f;
+}
+
+.swiper-pagination {
+  position: static !important;
+}
+
 /** Splash screen animation setting **/
 @keyframes fadeScale {
   0% {
