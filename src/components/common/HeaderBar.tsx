@@ -24,7 +24,9 @@ export default function HeaderBar({ title, showInfo }: HeaderBarProps) {
           >
             <ArrowLeft className="w-6 h-6 hover:text-[#cbd5e1a5]" />
           </button>
-          <span className="text-sm relative left-34">{title}</span>
+          <span className="text-sm absolute left-1/2 -translate-x-1/2">
+            {title}
+          </span>
         </div>
         {/* Home 전용 InfoIcon */}
         {showInfo && (
