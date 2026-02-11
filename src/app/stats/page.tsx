@@ -28,7 +28,7 @@ export default function StatsPage() {
       <HeaderBar title="Stats" />
 
       {/* Running modify */}
-      <div className="space-y-5 pt-5 h-[calc(100vh-11vh)] overflow-y-scroll">
+      <div className="space-y-5 pt-5 h-[calc(100vh-11vh)] overflow-y-auto">
         <div className="text-[#CBD5E1] bg-[#242E35] w-75 h-55 mx-auto pt-3 font-light rounded-2xl">
           <h2 className="text-xl ml-5 pb-3">Running</h2>
           {/* distance 선택 */}
