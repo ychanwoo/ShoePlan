@@ -9,7 +9,7 @@ export default function HomePage() {
     <>
       <HeaderBar title="Home" showInfo />
 
-      <div className="h-[calc(100vh-11vh)] overflow-y-scroll">
+      <div className="h-[calc(100vh-11vh)] overflow-y-auto">
         <div className="flex flex-col items-center relative top-25">
           <ShoeLifeProgress percentage={72} />
         </div>

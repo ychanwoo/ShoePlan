@@ -12,7 +12,7 @@ export interface HeaderBarProps {
 export default function HeaderBar({ title, showInfo }: HeaderBarProps) {
   const router = useRouter();
   return (
-    <header className="w-full h-[11vh] relative top-5">
+    <header className="w-full min-h-17 pt-3 shrink-0 bg-[#2F3A43]">
       {/* 상단 바 */}
       <div className="flex items-center justify-between px-4 h-14 text-[#CBD5E1]">
         {/* 왼족 */}

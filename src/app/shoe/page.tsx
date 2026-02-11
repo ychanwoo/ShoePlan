@@ -16,7 +16,7 @@ export default function ShoePage() {
     <>
       <HeaderBar title="Shoe" />
 
-      <div className="pb-30 h-[calc(100vh-10vh)] overflow-y-scroll">
+      <div className="pb-30 h-[calc(100vh-11vh)] overflow-y-auto">
         {/* Current Running Trends */}
         <div className="flex gap-x-1 text-[#CBD5E1] text-xl mt-5 ml-5">
           <ChartColumn />
