@@ -159,7 +159,7 @@ export default function ShoePage() {
           <p className="text-[#CBD5E1] text-sm text-center mb-2 mt-10">
             실제 트렌드를 통해 추천 받아보세요
           </p>
-          <MainBtn href="" className="mx-auto">
+          <MainBtn href="/shoe/recommend" className="mx-auto">
             나에게 맞는 러닝화 추천 받기
           </MainBtn>
         </div>
