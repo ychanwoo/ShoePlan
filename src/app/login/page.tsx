@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import LogoImg from "@/assets/logo.svg";
-import { LoginButton } from "@/components/common/LoginButton";
-import { useRouter } from "next/navigation";
+import { GoogleLoginBtn } from "@/components/common/GoogleLoginBtn";
+import { KakaoLoginBtn } from "@/components/common/KakaoLoginBtn";
+import { NaverLoginBtn } from "@/components/common/NaverLoginBtn";
 
 export default function LoginPage() {
   // * 임시 코드 /home경로로 이동하는 흐름 파악 위해 작성 (추후 제거)
-  const router = useRouter();
   return (
     <>
       <div className="pb-70">
@@ -21,9 +21,9 @@ export default function LoginPage() {
 
         <div className="space-y-6">
           {/* 임시로 카카오 버튼 클릭 시 home 경로로 이동 */}
-          <LoginButton provider="kakao" onClick={() => router.push("/home")} />
-          <LoginButton provider="google" />
-          <LoginButton provider="naver" />
+          <KakaoLoginBtn />
+          <GoogleLoginBtn />
+          <NaverLoginBtn />
         </div>
       </div>
     </>
