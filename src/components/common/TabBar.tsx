@@ -1,23 +1,35 @@
+"use client";
 import { ChartNoAxesCombined, CircleUserRound, Home } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function TabBar() {
+  const pathName = usePathname();
   return (
-    <div className="w-97.5 h-21.75 bg-[#242E35] flex justify-around fixed bottom-0">
+    <div className="w-full max-w-110 h-21.75 bg-[#242E35] flex justify-around fixed bottom-0">
       {/* Home tab */}
-      <Link href="/home" className="text-[#CBD5E1] hover:text-[#1E7F4F] pt-3">
+      <Link
+        href="/home"
+        className={` hover:text-[#1E7F4F] pt-3 ${pathName === "/home" ? "text-[#1E7F4F]" : "text-[#CBD5E1]"}`}
+      >
         <Home width={20} height={20} className="mx-auto" />
         <span className="text-sm">Home</span>
       </Link>
 
       {/* Stats Tab */}
-      <Link href="/stats" className="text-[#CBD5E1] hover:text-[#1E7F4F] pt-3">
+      <Link
+        href="/stats"
+        className={`hover:text-[#1E7F4F] pt-3 ${pathName === "/stats" ? "text-[#1E7F4F]" : "text-[#CBD5E1]"}`}
+      >
         <ChartNoAxesCombined width={20} height={20} className="mx-auto" />
         <span className="text-sm">Stats</span>
       </Link>
 
       {/* Shoe Tab */}
-      <Link href="/shoe" className="text-[#CBD5E1] hover:text-[#1E7F4F] pt-3">
+      <Link
+        href="/shoe"
+        className={`hover:text-[#1E7F4F] pt-3 ${pathName === "/shoe" ? "text-[#1E7F4F]" : "text-[#CBD5E1]"}`}
+      >
         <svg
           className="mx-auto"
           width="22"
@@ -46,7 +58,7 @@ export default function TabBar() {
       {/* Profile Tab */}
       <Link
         href="/profile"
-        className="text-[#CBD5E1] hover:text-[#1E7F4F] pt-3"
+        className={`hover:text-[#1E7F4F] pt-3 ${pathName === "/profile" ? "text-[#1E7F4F]" : "text-[#CBD5E1]"}`}
       >
         <CircleUserRound width={20} height={20} className="mx-auto" />
         <span className="text-sm">Profile</span>
