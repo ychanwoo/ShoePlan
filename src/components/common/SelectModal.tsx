@@ -16,7 +16,7 @@ export function SelectModal({
   onClose,
 }: SelectModalProps) {
   return (
-    <div className="fixed inset-0 bg-black/50 text-[#CBD5E1] flex items-end z-50 w-97.5 mx-auto">
+    <div className="fixed inset-0 bg-black/50 text-[#CBD5E1] flex items-end z-50 w-110 mx-auto">
       <div className="w-full bg-[#27323A] rounded-t-2xl p-6">
         {/* Title */}
         <h2 className="text-lg font-semibold mb-4 capitalize">

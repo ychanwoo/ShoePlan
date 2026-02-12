@@ -19,7 +19,7 @@ export default function ProfilePage() {
     <>
       <HeaderBar title="Profile" />
 
-      <section className="space-y-5 pt-5 h-[calc(100vh-11vh)] overflow-y-auto">
+      <section className="space-y-5 pb-28 h-[calc(100vh-11vh)] overflow-y-auto">
         {/* profile 영역 */}
         <div className="flex pt-5">
           <div className="w-16 h-16 rounded-full ml-7 bg-[#8FA68E]" />
@@ -55,8 +55,9 @@ export default function ProfilePage() {
             <label htmlFor="motto" className="text-sm font-light">
               Your Motto
             </label>
-            <div className="flex gap-x-4">
-              <div className="bg-[#242E35] w-52.5 h-17.5 rounded-md flex items-center justify-center overflow-auto">
+            <div className="flex items-end">
+              {/* 고정 박스 */}
+              <div className="bg-[#242E35] w-52.5 h-17.5 rounded-md flex items-center justify-center px-3">
                 <div
                   contentEditable
                   onInput={(e) => setText(e.currentTarget.textContent || "")}
@@ -64,9 +65,11 @@ export default function ProfilePage() {
                   className="w-full text-center text-[#CBD5E1] text-sm outline-none wrap-break-words"
                 />
               </div>
+
+              {/* 버튼 */}
               <button
-                className="text-white w-20 h-8.75 rounded-2xl bg-[#1E7F4F] 
-               flex items-center justify-center hover:bg-[#196e43] ml-7 mt-9"
+                className="text-white px-4 h-7 w-14 rounded-2xl bg-[#1E7F4F] text-xs
+                flex items-center justify-center hover:bg-[#196e43] shrink-0 absolute right-5"
               >
                 Save
               </button>
