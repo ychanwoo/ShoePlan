@@ -2,7 +2,7 @@
 import HeaderBar from "@/components/common/HeaderBar";
 import TabBar from "@/components/common/TabBar";
 import { ChartColumn, TrendingUpDown } from "lucide-react";
-import MainBtn from "@/components/common/MainBtn";
+import MainBtn from "@/components/button/MainBtn";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";

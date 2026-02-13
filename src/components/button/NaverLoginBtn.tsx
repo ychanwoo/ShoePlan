@@ -1,4 +1,4 @@
-import NaverIcon from "./icons/NaverIcon";
+import NaverIcon from "../common/icons/NaverIcon";
 
 export function NaverLoginBtn() {
   const handleLogin = () => {

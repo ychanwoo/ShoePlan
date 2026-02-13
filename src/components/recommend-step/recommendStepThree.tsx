@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import PrevBtn from "../common/PrevBtn";
-import NextBtn from "../common/NextBtn";
+import PrevBtn from "../button/PrevBtn";
+import NextBtn from "../button/NextBtn";
 import { StepNavigationProps } from "@/types/StepNavigationProps";
 import Link from "next/link";
 

@@ -2,8 +2,8 @@
 import Image from "next/image";
 import LogoImg from "@/assets/logo.svg";
 import { StepNavigationProps } from "@/types/StepNavigationProps";
-import PrevBtn from "../common/PrevBtn";
-import NextBtn from "../common/NextBtn";
+import PrevBtn from "../button/PrevBtn";
+import NextBtn from "../button/NextBtn";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { shoeType } from "@/types/shoeType";
