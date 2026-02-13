@@ -6,11 +6,21 @@ import NextBtn from "../button/NextBtn";
 import { useState } from "react";
 import PrevBtn from "../button/PrevBtn";
 import Link from "next/link";
+import { getSurveyData, setSurveyData } from "@/lib/surveyStorage";
 
 const options = ["1~3 개월", "3~6 개월", "6~12 개월", "1~2 년", "2년 이상"];
 
 export default function StepFivePage({ onNext, onPrev }: StepNavigationProps) {
-  const [selected, setSelected] = useState<string | null>(null);
+  const saved = getSurveyData();
+  const initialSelected = options.includes(saved.shoeAge || "")
+    ? saved.shoeAge!
+    : null;
+  const [selected, setSelected] = useState<string | null>(initialSelected);
+
+  const handleSelect = (option: string) => {
+    setSelected(option);
+    setSurveyData({ shoeAge: option });
+  };
 
   return (
     <>
@@ -49,7 +59,7 @@ export default function StepFivePage({ onNext, onPrev }: StepNavigationProps) {
               type="checkbox"
               name="type"
               checked={selected === option}
-              onChange={() => setSelected(option)}
+              onChange={() => handleSelect(option)}
               className="w-5 h-5 accent-[#1E7F4F]"
             />
 
