@@ -5,6 +5,7 @@ import { StepNavigationProps } from "@/types/StepNavigationProps";
 import PrevBtn from "../button/PrevBtn";
 import NextBtn from "../button/NextBtn";
 import { useState } from "react";
+import { getSurveyData, setSurveyData } from "@/lib/surveyStorage";
 
 const options = [
   "LSD(Long Slow Distance",
@@ -14,7 +15,15 @@ const options = [
 ];
 
 export default function StepThreePage({ onNext, onPrev }: StepNavigationProps) {
-  const [selected, setSelected] = useState<string | null>(null);
+  const saved = getSurveyData();
+  const [selected, setSelected] = useState<string | null>(
+    saved.runningType || null,
+  );
+
+  const handleSelect = (option: string) => {
+    setSelected(option);
+    setSurveyData({ runningType: option });
+  };
 
   return (
     <>
@@ -53,7 +62,7 @@ export default function StepThreePage({ onNext, onPrev }: StepNavigationProps) {
               type="checkbox"
               name="type"
               checked={selected === option}
-              onChange={() => setSelected(option)}
+              onChange={() => handleSelect(option)}
               className="w-5 h-5 accent-[#1E7F4F]"
             />
 

@@ -6,17 +6,26 @@ import { useState } from "react";
 import Picker from "react-mobile-picker";
 import { StepNavigationProps } from "@/types/StepNavigationProps";
 import NextBtn from "../button/NextBtn";
+import { getSurveyData, setSurveyData } from "@/lib/surveyStorage";
 
 const heights = Array.from({ length: 101 }, (_, i) => i + 130); // 130~230
 const weights = Array.from({ length: 101 }, (_, i) => i + 40); // 40~140
 
 export default function StepOnePage({ onNext }: StepNavigationProps) {
+  const saved = getSurveyData();
+
   const [value, setValue] = useState({
-    height: 160,
-    weight: 50,
+    height: saved.height || 160,
+    weight: saved.weight || 50,
   });
 
   const [open, setOpen] = useState<"height" | "weight" | null>(null);
+
+  //* 값 바뀔때마다 sessionStorage에 저장
+  const handleChange = (key: "height" | "weight", val: number) => {
+    setValue((prev) => ({ ...prev, [key]: val }));
+    setSurveyData({ [key]: val });
+  };
 
   return (
     <>
@@ -84,7 +93,7 @@ export default function StepOnePage({ onNext }: StepNavigationProps) {
           <div className="w-full bg-[#27323A] rounded-t-2xl p-6">
             <Picker
               value={{ [open]: value[open] }}
-              onChange={(v) => setValue({ ...value, [open]: Number(v[open]) })}
+              onChange={(v) => handleChange(open, Number(v[open]))}
             >
               <Picker.Column name={open}>
                 {(open === "height" ? heights : weights).map((n) => (

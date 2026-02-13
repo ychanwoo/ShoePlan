@@ -7,6 +7,7 @@ import NextBtn from "../button/NextBtn";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { shoeType } from "@/types/shoeType";
+import { getSurveyData, setSurveyData, SurveyData } from "@/lib/surveyStorage";
 
 const brands = ["Nike", "Adidas", "Asics", "New Balance"];
 
@@ -20,10 +21,28 @@ const models: Record<string, string[]> = {
 
 export default function StepFourPage({ onNext, onPrev }: StepNavigationProps) {
   const [open, setOpen] = useState<shoeType>(null);
+
+  const saved: SurveyData = getSurveyData();
   const [value, setValue] = useState({
-    brand: "",
-    model: "",
+    brand: saved.shoeBrand || "",
+    model: saved.shoeModel || "",
   });
+
+  const handleSelect = (key: "brand" | "model", item: string) => {
+    setValue((prev) => ({
+      ...prev,
+      [key]: item,
+      ...(key === "brand" ? { model: "" } : {}), // 브랜드 바꾸면 모델 초기화
+    }));
+
+    // sessionStorage 업데이트
+    if (key === "brand") {
+      setSurveyData({ shoeBrand: item, shoeModel: "" });
+    } else {
+      setSurveyData({ shoeModel: item });
+    }
+    setOpen(null);
+  };
   return (
     <>
       {/* 상단 로고 이미지 */}
@@ -98,14 +117,7 @@ export default function StepFourPage({ onNext, onPrev }: StepNavigationProps) {
                 (item) => (
                   <button
                     key={item}
-                    onClick={() => {
-                      setValue((prev) => ({
-                        ...prev,
-                        [open]: item,
-                        ...(open === "brand" && { model: "" }),
-                      }));
-                      setOpen(null);
-                    }}
+                    onClick={() => handleSelect(open, item)}
                     className={`w-full text-left px-4 py-3 rounded-xl transition
                 ${
                   value[open] === item
