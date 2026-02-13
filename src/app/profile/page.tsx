@@ -12,9 +12,23 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
   const [text, setText] = useState("");
+  const router = useRouter();
+
+  const handleLogout = () => {
+    // 쿠키 삭제
+    document.cookie = "userId=; path=/; max-age=0";
+    document.cookie = "provider=; path=/; max-age=0";
+    document.cookie = "nickname=; path=/; max-age=0";
+    document.cookie = "email=; path=/; max-age=0";
+    document.cookie = "profile_image=; path=/; max-age=0";
+
+    console.log("로그아웃 완료");
+    router.replace("/login");
+  };
   return (
     <>
       <HeaderBar title="Profile" />
@@ -109,7 +123,7 @@ export default function ProfilePage() {
         <div className="text-[#CBD5E1]">
           <h3 className="font-semibold pl-6 pb-2">Account</h3>
           <div className="bg-[#242E35] flex flex-col h-12.5 justify-center p-5 hover:text-[#cbd5e1cc]">
-            <button className="flex gap-x-2">
+            <button onClick={handleLogout} className="flex gap-x-2">
               <LogOut />
               <span>Log out</span>
             </button>
