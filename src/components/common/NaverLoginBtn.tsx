@@ -2,8 +2,17 @@ import NaverIcon from "./icons/NaverIcon";
 
 export function NaverLoginBtn() {
   const handleLogin = () => {
-    // 현재는 임시로 /home 이동
-    window.location.href = "/home";
+    const state = crypto.randomUUID(); // CSRF 방지용
+
+    const NAVER_LOGIN_URL = `
+      https://nid.naver.com/oauth2.0/authorize
+      ?response_type=code
+      &client_id=${process.env.NEXT_PUBLIC_NAVER_CLIENT_ID}
+      &redirect_uri=${process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI}
+      &state=${state}
+    `.replace(/\s+/g, "");
+
+    window.location.href = NAVER_LOGIN_URL;
   };
 
   return (
