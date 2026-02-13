@@ -3,8 +3,8 @@
 import LogoImg from "@/assets/logo.svg";
 import Image from "next/image";
 import { StepNavigationProps } from "@/types/StepNavigationProps";
-import NextBtn from "../common/NextBtn";
-import PrevBtn from "../common/PrevBtn";
+import NextBtn from "../button/NextBtn";
+import PrevBtn from "../button/PrevBtn";
 import { useState } from "react";
 
 const options = [

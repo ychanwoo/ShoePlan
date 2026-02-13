@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import NextBtn from "../common/NextBtn";
+import NextBtn from "../button/NextBtn";
 import { StepNavigationProps } from "@/types/StepNavigationProps";
 
 const options = ["Road (아스팔트)", "Track (트랙)", "Mixed (혼합)"];

@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import LogoImg from "@/assets/logo.svg";
-import { GoogleLoginBtn } from "@/components/common/GoogleLoginBtn";
-import { KakaoLoginBtn } from "@/components/common/KakaoLoginBtn";
-import { NaverLoginBtn } from "@/components/common/NaverLoginBtn";
+import { GoogleLoginBtn } from "@/components/button/GoogleLoginBtn";
+import { KakaoLoginBtn } from "@/components/button/KakaoLoginBtn";
+import { NaverLoginBtn } from "@/components/button/NaverLoginBtn";
 
 export default function LoginPage() {
   // * 임시 코드 /home경로로 이동하는 흐름 파악 위해 작성 (추후 제거)

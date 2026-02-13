@@ -2,9 +2,9 @@
 import Image from "next/image";
 import LogoImg from "@/assets/logo.svg";
 import { StepNavigationProps } from "@/types/StepNavigationProps";
-import NextBtn from "../common/NextBtn";
+import NextBtn from "../button/NextBtn";
 import { useState } from "react";
-import PrevBtn from "../common/PrevBtn";
+import PrevBtn from "../button/PrevBtn";
 import Link from "next/link";
 
 const options = ["1~3 개월", "3~6 개월", "6~12 개월", "1~2 년", "2년 이상"];

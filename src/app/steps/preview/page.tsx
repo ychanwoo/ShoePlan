@@ -1,7 +1,7 @@
 import Image from "next/image";
 import LogoImg from "@/assets/logo.svg";
 import ExShoe from "@/assets/example-shoe.png";
-import MainBtn from "@/components/common/MainBtn";
+import MainBtn from "@/components/button/MainBtn";
 
 export default function previewPage() {
   return (

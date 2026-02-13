@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import Picker from "react-mobile-picker";
 import { StepNavigationProps } from "@/types/StepNavigationProps";
-import NextBtn from "../common/NextBtn";
+import NextBtn from "../button/NextBtn";
 
 const heights = Array.from({ length: 101 }, (_, i) => i + 130); // 130~230
 const weights = Array.from({ length: 101 }, (_, i) => i + 40); // 40~140

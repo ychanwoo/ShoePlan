@@ -1,6 +1,6 @@
 import Image from "next/image";
 import LogoImg from "@/assets/logo.svg";
-import MainBtn from "@/components/common/MainBtn";
+import MainBtn from "@/components/button/MainBtn";
 
 export default function StartPage() {
   return (
