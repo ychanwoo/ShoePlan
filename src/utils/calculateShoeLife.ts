@@ -17,9 +17,10 @@ export interface ShoeLifeResult {
 }
 
 export function calculateShoeLife(): ShoeLifeResult | null {
-  if (typeof window === "undefined") return null;
-
-  const stored = sessionStorage.getItem("inputDataBeforeLogin");
+  const stored =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("inputDataBeforeLogin")
+      : null;
   if (!stored) return null;
 
   const data: SessionShoeData = JSON.parse(stored);

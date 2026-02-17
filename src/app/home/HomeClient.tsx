@@ -3,10 +3,17 @@
 import HeaderBar from "@/components/common/HeaderBar";
 import TabBar from "@/components/common/TabBar";
 import ShoeLifeProgress from "@/components/homeTab/ShoeLifeProgress";
-import { calculateShoeLife } from "@/utils/calculateShoeLife";
+import { calculateShoeLife, ShoeLifeResult } from "@/utils/calculateShoeLife";
+import { useEffect, useState } from "react";
 
 export default function HomeClient() {
-  const shoeLife = calculateShoeLife();
+  const [shoeLife, setShoeLife] = useState<ShoeLifeResult | null>(null);
+
+  useEffect(() => {
+    const result = calculateShoeLife();
+    setShoeLife(result);
+  }, []);
+
   if (!shoeLife) return null;
   const remainmingKm = shoeLife.recommendedLife - shoeLife.usedDistance;
   const remainingPercent = shoeLife.usagePercent;
@@ -24,7 +31,7 @@ export default function HomeClient() {
 
   return (
     <>
-      <HeaderBar title="Home" showInfo />
+      <HeaderBar title="Home" />
 
       <div className="h-[calc(100vh-11vh)] overflow-y-auto pb-100">
         <div className="flex flex-col items-center relative top-25">
