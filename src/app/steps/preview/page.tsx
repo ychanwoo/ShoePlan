@@ -15,7 +15,7 @@ export default function PreviewPage() {
   if (!shoeLife) return null;
 
   const isExceeded =
-    shoeLife.remainingMonths === 0 && shoeLife.usagePercent === 100;
+    shoeLife.remainingMonths === 0 && shoeLife.usagePercent === 0;
   return (
     <>
       {/* 상단 로고 이미지*/}
@@ -50,6 +50,7 @@ export default function PreviewPage() {
           </p>
         </div>
 
+        {/* 러닝화 추천 이미지 */}
         <div>
           <p className="text-[#CBD5E1] text-center relative top-58">
             당신의 러닝 스타일에 딱 맞는 러닝화 추천
