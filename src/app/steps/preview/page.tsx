@@ -1,9 +1,21 @@
+"use client";
 import Image from "next/image";
 import LogoImg from "@/assets/logo.svg";
 import ExShoe from "@/assets/example-shoe.png";
 import MainBtn from "@/components/button/MainBtn";
+import { calculateShoeLife } from "@/utils/calculateShoeLife";
+import { useState } from "react";
 
-export default function previewPage() {
+export default function PreviewPage() {
+  const [shoeLife] = useState(() => {
+    if (typeof window === "undefined") return null;
+    return calculateShoeLife();
+  });
+
+  if (!shoeLife) return null;
+
+  const isExceeded =
+    shoeLife.remainingMonths === 0 && shoeLife.usagePercent === 100;
   return (
     <>
       {/* 상단 로고 이미지*/}
@@ -24,7 +36,17 @@ export default function previewPage() {
 
         <div className="relative top-30">
           <p className="text-white text-2xl font-semibold text-center">
-            교체까지 약 <span className="text-[#1E7F4F]">OO</span> 개월
+            {isExceeded ? (
+              <>권장 수명을 초과했습니다</>
+            ) : (
+              <>
+                교체까지 약
+                <span className="text-[#1E7F4F] pl-2 pr-1">
+                  {shoeLife?.remainingMonths}
+                </span>
+                개월
+              </>
+            )}
           </p>
         </div>
 

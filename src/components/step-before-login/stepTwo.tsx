@@ -9,10 +9,10 @@ import { useState } from "react";
 import { getSurveyData, setSurveyData } from "@/lib/surveyStorage";
 
 const options = [
-  "20km 미만",
-  "20~50km",
+  "50km 미만",
   "50~100km",
-  "100~300km",
+  "100~200km",
+  "200~300km",
   "300km 이상",
   "직접입력",
 ];

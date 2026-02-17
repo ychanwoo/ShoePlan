@@ -8,7 +8,15 @@ import PrevBtn from "../button/PrevBtn";
 import Link from "next/link";
 import { getSurveyData, setSurveyData } from "@/lib/surveyStorage";
 
-const options = ["1~3 개월", "3~6 개월", "6~12 개월", "1~2 년", "2년 이상"];
+const options = [
+  "1개월",
+  "3개월",
+  "6개월",
+  "9개월",
+  "12개월",
+  "18개월",
+  "24개월 이상",
+];
 
 export default function StepFivePage({ onNext, onPrev }: StepNavigationProps) {
   const saved = getSurveyData();
@@ -44,7 +52,7 @@ export default function StepFivePage({ onNext, onPrev }: StepNavigationProps) {
       {/* Shoe Age 설명 */}
       <div className="text-[#CBD5E1] ml-7">
         <h3 className="text-xl mb-3">Shoe Age</h3>
-        <p>언제 부터 신기 시작하셨나요?</p>
+        <p>몇 개월 동안 사용하셨나요?</p>
         <p>대략적인 시기만 알아도 충분해요</p>
       </div>
 
