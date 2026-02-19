@@ -31,7 +31,7 @@ export function calculateShoeLife(): ShoeLifeResult | null {
   const modelBaseLife: Record<string, number> = {
     Pegasus: 650,
     Vaporfly: 400,
-    Invincible: 700,
+    ZoomX: 700,
 
     "Adizero Boston": 600,
     "Adios Pro": 420,

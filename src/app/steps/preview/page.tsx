@@ -1,21 +1,50 @@
 "use client";
 import Image from "next/image";
 import LogoImg from "@/assets/logo.svg";
-import ExShoe from "@/assets/example-shoe.png";
 import MainBtn from "@/components/button/MainBtn";
 import { calculateShoeLife } from "@/utils/calculateShoeLife";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+const shoes = [
+  "nike-pegasus",
+  "nike-vaporfly",
+  "nike-zoomx",
+  "adidas-adiospro",
+  "adidas-boston",
+  "asics-kayano",
+  "asics-magicspeed",
+  "asics-metaspeed",
+  "asics-nimbus",
+  "nb-1080",
+  "nb-fuelcell",
+];
 
 export default function PreviewPage() {
-  const [shoeLife] = useState(() => {
-    if (typeof window === "undefined") return null;
-    return calculateShoeLife();
-  });
+  const [randomShoe, setRandomShoe] = useState<string | null>(null);
+  const [shoeLife, setShoeLife] = useState<ReturnType<
+    typeof calculateShoeLife
+  > | null>(null);
 
-  if (!shoeLife) return null;
+  useEffect(() => {
+    // 계산된 ShoeLife가져오기
+    const result = calculateShoeLife();
+    setShoeLife(result);
+
+    // 이미지 sessionStorage에 저장
+    const saved = sessionStorage.getItem("previewImage");
+    if (saved) {
+      setRandomShoe(saved);
+    } else {
+      const random = shoes[Math.floor(Math.random() * shoes.length)];
+      sessionStorage.setItem("previewImage", random);
+      setRandomShoe(random);
+    }
+  }, []);
+
+  if (!randomShoe || !shoeLife) return null;
 
   const isExceeded =
-    shoeLife.remainingMonths === 0 && shoeLife.usagePercent === 100;
+    shoeLife.remainingMonths === 0 && shoeLife.usagePercent === 0;
   return (
     <>
       {/* 상단 로고 이미지*/}
@@ -50,19 +79,20 @@ export default function PreviewPage() {
           </p>
         </div>
 
+        {/* 러닝화 추천 이미지 */}
         <div>
           <p className="text-[#CBD5E1] text-center relative top-58">
             당신의 러닝 스타일에 딱 맞는 러닝화 추천
           </p>
-          <div className="relative overflow-hidden w-45 h-45 mx-auto top-60">
+          <div className="relative overflow-hidden w-45 aspect-square mx-auto top-60">
             <Image
-              src={ExShoe}
+              src={`/preview-images/${randomShoe}.webp`}
               alt="shoe-image"
               fill
               className="object-cover"
             />
             {/* Image blur */}
-            <div className="absolute inset-x-2 top-1 bottom-3 overflow-hidden backdrop-blur-[7px]" />
+            <div className="absolute inset-x-0 top-1 bottom-3 overflow-hidden backdrop-blur-[7px]" />
           </div>
         </div>
 

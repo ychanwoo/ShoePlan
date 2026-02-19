@@ -1,8 +1,12 @@
+"use client";
 import Image from "next/image";
 import LogoImg from "@/assets/logo.svg";
 import MainBtn from "@/components/button/MainBtn";
 
 export default function StartPage() {
+  const handleStart = () => {
+    sessionStorage.removeItem("previewImage");
+  };
   return (
     <>
       <div className="pt-30 flex justify-center">
@@ -19,7 +23,9 @@ export default function StartPage() {
       </div>
 
       <div className="flex justify-center pt-[25vh]">
-        <MainBtn href="/steps">교체 타이밍 확인하기 →</MainBtn>
+        <MainBtn href="/steps" onClick={handleStart}>
+          교체 타이밍 확인하기 →
+        </MainBtn>
       </div>
     </>
   );
