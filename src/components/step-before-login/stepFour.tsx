@@ -13,7 +13,7 @@ const brands = ["Nike", "Adidas", "Asics", "New Balance"];
 
 //* 임시 더미 데이터 추후 수정 예정
 const models: Record<string, string[]> = {
-  Nike: ["Pegasus", "Vaporfly", "Invincible"],
+  Nike: ["Pegasus", "Vaporfly", "ZoomX"],
   Adidas: ["Adizero Boston", "Adios Pro"],
   Asics: ["Nimbus", "Kayano", "Magic Speed", "Meta Speed"],
   "New Balance": ["1080", "FuelCell Rebel"],
