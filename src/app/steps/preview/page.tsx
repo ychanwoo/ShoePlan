@@ -1,16 +1,20 @@
 "use client";
 import Image from "next/image";
 import LogoImg from "@/assets/logo.svg";
-import ExShoe from "@/assets/example-shoe.png";
+import ExShoe from "@/assets/preview-images/example-shoe.png";
 import MainBtn from "@/components/button/MainBtn";
 import { calculateShoeLife } from "@/utils/calculateShoeLife";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function PreviewPage() {
-  const [shoeLife] = useState(() => {
-    if (typeof window === "undefined") return null;
-    return calculateShoeLife();
-  });
+  const [shoeLife, setShoeLife] = useState<ReturnType<
+    typeof calculateShoeLife
+  > | null>(null);
+
+  useEffect(() => {
+    const result = calculateShoeLife();
+    setShoeLife(result);
+  }, []);
 
   if (!shoeLife) return null;
 
