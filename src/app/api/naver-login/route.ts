@@ -35,7 +35,8 @@ export async function POST(req: Request) {
     const { data: existingUser } = await supabase
       .from("users")
       .select("*")
-      .eq("email", naverUser.email)
+      .eq("oauth_id", naverUser.id)
+      .eq("provider", "naver")
       .single();
 
     let user;
@@ -45,6 +46,7 @@ export async function POST(req: Request) {
       const { data: newUser, error } = await supabase
         .from("users")
         .insert({
+          oauth_id: naverUser.id,
           email: naverUser.email,
           nickname: naverUser.nickname,
           profile_image: naverUser.profile_image,
@@ -62,7 +64,7 @@ export async function POST(req: Request) {
     // 여기서 JWT 발급하거나 세션 생성하면 됨
     const response = NextResponse.json({ success: true });
 
-    response.cookies.set("userId", user.id, {
+    response.cookies.set("oauthId", user.oauth_id, {
       httpOnly: true,
       path: "/",
       maxAge: 60 * 60 * 24, // 1일

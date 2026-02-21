@@ -39,17 +39,19 @@ export async function POST(req: Request) {
     const { data: existingUser } = await supabase
       .from("users")
       .select("*")
-      .eq("email", googleUser.email)
-      .single();
+      .eq("oauth_id", googleUser.id)
+      .eq("provider", "google")
+      .maybeSingle();
 
     let user;
     if (!existingUser) {
       const { data: newUser, error } = await supabase
         .from("users")
         .insert({
-          email: googleUser.email,
-          nickname: googleUser.name,
-          profile_image: googleUser.picture,
+          oauth_id: googleUser.id,
+          email: googleUser.email ?? null,
+          nickname: googleUser.name ?? null,
+          profile_image: googleUser.picture ?? null,
           provider: "google",
         })
         .select()
@@ -61,7 +63,7 @@ export async function POST(req: Request) {
     }
 
     const response = NextResponse.json({ success: true, user });
-    response.cookies.set("userId", user.id, {
+    response.cookies.set("oauthId", user.oauth_id, {
       httpOnly: true,
       path: "/",
       maxAge: 60 * 60 * 24,

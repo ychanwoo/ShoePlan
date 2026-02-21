@@ -18,6 +18,7 @@ export default function NaverCallbackPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code, state }),
+        credentials: "include",
       });
 
       if (res.ok) {
