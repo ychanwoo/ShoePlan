@@ -33,32 +33,52 @@ export async function POST(req: Request) {
     });
     const kakaoUserData = await userRes.json();
     const kakaoUser = {
-      email: kakaoUserData.kakao_account.email,
-      nickname: kakaoUserData.properties.nickname,
-      profile_image: kakaoUserData.properties.profile_image,
+      oauth_id: String(kakaoUserData.id),
+      email: kakaoUserData.kakao_account.email ?? null,
+      nickname: kakaoUserData.properties.nickname ?? null,
+      profile_image: kakaoUserData.properties.profile_image ?? null,
     };
 
     const { data: existingUser } = await supabase
       .from("users")
       .select("*")
-      .eq("email", kakaoUser.email)
-      .single();
+      .eq("oauth_id", kakaoUser.oauth_id)
+      .eq("provider", "kakao")
+      .maybeSingle();
 
     let user;
     if (!existingUser) {
+      // 신규 유저 생성
       const { data: newUser, error } = await supabase
         .from("users")
-        .insert({ ...kakaoUser, provider: "kakao" })
+        .insert({
+          ...kakaoUser,
+          provider: "kakao",
+        })
         .select()
         .single();
+
       if (error) throw error;
       user = newUser;
     } else {
-      user = existingUser;
+      // 기존 유저 정보 업데이트
+      const { data: updatedUser, error } = await supabase
+        .from("users")
+        .update({
+          email: kakaoUser.email,
+          nickname: kakaoUser.nickname,
+          profile_image: kakaoUser.profile_image,
+        })
+        .eq("id", existingUser.id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      user = updatedUser;
     }
 
     const response = NextResponse.json({ success: true, user });
-    response.cookies.set("userId", user.id, {
+    response.cookies.set("oauthId", user.oauth_id, {
       httpOnly: true,
       path: "/",
       maxAge: 60 * 60 * 24,

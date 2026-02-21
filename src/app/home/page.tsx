@@ -4,9 +4,9 @@ import HomeClient from "./HomeClient";
 
 export default async function HomePage() {
   const cookieStore = await cookies();
-  const userId = cookieStore.get("userId");
+  const oauthId = cookieStore.get("oauthId");
 
-  if (!userId) {
+  if (!oauthId) {
     redirect("/login");
   }
 

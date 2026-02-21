@@ -4,15 +4,31 @@ import HeaderBar from "@/components/common/HeaderBar";
 import TabBar from "@/components/common/TabBar";
 import ShoeLifeProgress from "@/components/homeTab/ShoeLifeProgress";
 import { calculateShoeLife, ShoeLifeResult } from "@/utils/calculateShoeLife";
+import useSyncSessionToDB from "@/utils/useSyncSessionToDB";
 import { useEffect, useState } from "react";
 
 export default function HomeClient() {
   const [shoeLife, setShoeLife] = useState<ShoeLifeResult | null>(null);
+  const [oauthId, setOauthId] = useState<string | null>(null);
 
+  // 신발 수명 계산
   useEffect(() => {
     const result = calculateShoeLife();
     setShoeLife(result);
   }, []);
+
+  useEffect(() => {
+    fetch("/api/me")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.oauthId) {
+          setOauthId(data.oauthId);
+        }
+      })
+      .catch(console.error);
+  }, []);
+
+  useSyncSessionToDB(oauthId);
 
   if (!shoeLife) return null;
   const remainmingKm = shoeLife.recommendedLife - shoeLife.usedDistance;

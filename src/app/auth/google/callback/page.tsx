@@ -16,6 +16,7 @@ export default function GoogleCallbackPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code }),
+        credentials: "include",
       });
 
       if (res.ok) {
