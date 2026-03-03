@@ -3,7 +3,11 @@
 import HeaderBar from "@/components/common/HeaderBar";
 import TabBar from "@/components/common/TabBar";
 import ShoeLifeProgress from "@/components/homeTab/ShoeLifeProgress";
-import { calculateShoeLife, ShoeLifeResult } from "@/utils/calculateShoeLife";
+import {
+  calculateShoeLife,
+  ShoeLifeResult,
+  SessionShoeData,
+} from "@/utils/calculateShoeLife";
 import useSyncSessionToDB from "@/utils/useSyncSessionToDB";
 import { useEffect, useState } from "react";
 
@@ -13,19 +17,54 @@ export default function HomeClient() {
 
   // 신발 수명 계산
   useEffect(() => {
-    const result = calculateShoeLife();
-    setShoeLife(result);
-  }, []);
+    const loadUserData = async () => {
+      // 1. sessionStorage에서 가져오기
+      const sessionResult = calculateShoeLife();
 
-  useEffect(() => {
-    fetch("/api/me")
-      .then((res) => res.json())
-      .then((data) => {
+      if (sessionResult) {
+        // sessionStorage에 데이터가 있으면 바로 사용
+        setShoeLife(sessionResult);
+      } else {
+        // 2. sessionStorage에 없으면 DB에서 가져오기
+        try {
+          const response = await fetch("/api/me");
+          const data = await response.json();
+
+          if (data.oauthId) {
+            setOauthId(data.oauthId);
+          }
+
+          if (data.profile) {
+            const shoeData: SessionShoeData = {
+              height: data.profile.height,
+              weight: data.profile.weight,
+              runningDistance: data.profile.running_distance,
+              runningDistanceCustom: data.profile.running_distance_custom,
+              runningType: data.profile.running_type,
+              shoeAge: data.profile.shoe_age,
+              shoeBrand: data.profile.shoe_brand,
+              shoeModel: data.profile.shoe_model,
+            };
+            const result = calculateShoeLife(shoeData);
+            setShoeLife(result);
+          }
+        } catch (error) {
+          console.error("Failed to load user data:", error);
+        }
+      }
+
+      try {
+        const response = await fetch("/api/me");
+        const data = await response.json();
         if (data.oauthId) {
           setOauthId(data.oauthId);
         }
-      })
-      .catch(console.error);
+      } catch (error) {
+        console.error("Failed to fetch oauthId:", error);
+      }
+    };
+
+    loadUserData();
   }, []);
 
   useSyncSessionToDB(oauthId);

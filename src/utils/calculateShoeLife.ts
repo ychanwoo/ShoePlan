@@ -16,14 +16,23 @@ export interface ShoeLifeResult {
   remainingMonths: number; // 남은 개월 수
 }
 
-export function calculateShoeLife(): ShoeLifeResult | null {
-  const stored =
-    typeof window !== "undefined"
-      ? sessionStorage.getItem("inputDataBeforeLogin")
-      : null;
-  if (!stored) return null;
+export function calculateShoeLife(inputData?: SessionShoeData | null): ShoeLifeResult | null {
+  // 인자로 데이터가 전달되면 그것을 사용, 없으면 sessionStorage에서 가져오기
+  let data: SessionShoeData | null = null;
 
-  const data: SessionShoeData = JSON.parse(stored);
+  if (inputData) {
+    data = inputData;
+  } else {
+    const stored =
+      typeof window !== "undefined"
+        ? sessionStorage.getItem("inputDataBeforeLogin")
+        : null;
+    if (stored) {
+      data = JSON.parse(stored);
+    }
+  }
+
+  if (!data) return null;
 
   /* -------------------------------
      모델 기본 수명
