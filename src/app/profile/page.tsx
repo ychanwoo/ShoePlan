@@ -16,18 +16,27 @@ import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
   const [text, setText] = useState("");
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+  const [toast, setToast] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogout = () => {
-    // 쿠키 삭제
-    document.cookie = "userId=; path=/; max-age=0";
-    document.cookie = "provider=; path=/; max-age=0";
-    document.cookie = "nickname=; path=/; max-age=0";
-    document.cookie = "email=; path=/; max-age=0";
-    document.cookie = "profile_image=; path=/; max-age=0";
+  const handleLogout = async () => {
+    setIsLoading(true);
 
-    console.log("로그아웃 완료");
-    router.replace("/login");
+    const res = await fetch("/api/logout", { method: "POST" });
+
+    if (res.ok) {
+      setIsLogoutOpen(false);
+      setToast("로그아웃 완료");
+
+      setTimeout(() => {
+        router.replace("/login");
+      }, 1000);
+    } else {
+      setToast("로그아웃에 실패했습니다.");
+      setIsLoading(false);
+    }
   };
   return (
     <>
@@ -123,13 +132,64 @@ export default function ProfilePage() {
         <div className="text-[#CBD5E1]">
           <h3 className="font-semibold pl-6 pb-2">Account</h3>
           <div className="bg-[#242E35] flex flex-col h-12.5 justify-center p-5 hover:text-[#cbd5e1cc]">
-            <button onClick={handleLogout} className="flex gap-x-2">
+            <button
+              onClick={() => setIsLogoutOpen(true)}
+              className="flex gap-x-2"
+            >
               <LogOut />
               <span>Log out</span>
             </button>
           </div>
         </div>
       </section>
+
+      {isLogoutOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div
+            className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-110 bg-black/60"
+            onClick={() => !isLoading && setIsLogoutOpen(false)}
+          />
+
+          <div className="relative bg-[#1B242C] w-80 rounded-2xl p-6 text-center shadow-xl">
+            <p className="text-white text-lg font-medium mb-6">
+              로그아웃 하시겠습니까?
+            </p>
+
+            <div className="flex gap-4">
+              <button
+                onClick={() => setIsLogoutOpen(false)}
+                disabled={isLoading}
+                className="flex-1 h-10 rounded-xl bg-[#242E35] text-[#CBD5E1]"
+              >
+                아니오
+              </button>
+
+              <button
+                onClick={handleLogout}
+                disabled={isLoading}
+                className="flex-1 h-10 rounded-xl bg-[#1E7F4F] text-white"
+              >
+                {isLoading ? "처리 중..." : "예"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 로그아웃 토스트창 */}
+      {toast && (
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-99 animate-toast">
+          <div className="flex items-center gap-3 bg-[#1B242C] text-white px-6 py-4 rounded-2xl shadow-2xl border border-[#242E35]">
+            {/* 아이콘 */}
+            <div className="w-6 h-6 flex items-center justify-center rounded-full bg-[#1E7F4F] text-sm">
+              ✓
+            </div>
+
+            {/* 메시지 */}
+            <p className="text-sm font-medium">{toast}</p>
+          </div>
+        </div>
+      )}
 
       <TabBar />
     </>
