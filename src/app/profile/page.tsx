@@ -24,6 +24,11 @@ interface UserInfo {
   provider: string;
 }
 
+interface ProfileInfo {
+  runner_nickname: string | null;
+  motto: string | null;
+}
+
 const PROVIDER_ICONS: Record<string, StaticImageData | string> = {
   google: GoogleIcon,
   naver: NaverIcon,
@@ -31,12 +36,18 @@ const PROVIDER_ICONS: Record<string, StaticImageData | string> = {
 };
 
 export default function ProfilePage() {
-  const [text, setText] = useState("");
+  const router = useRouter();
+  // Logout
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const [toast, setToast] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  // user / userInfo
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-  const router = useRouter();
+  const [profileInfo, setProfileInfo] = useState<ProfileInfo | null>(null);
+  // running nickname and motto
+  const [inputNickname, setInputNickname] = useState("");
+  const [inputMotto, setInputMotto] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   //* users DB에서 사용자 로그인 정보 가져오기
   useEffect(() => {
@@ -46,6 +57,14 @@ export default function ProfilePage() {
         const data = await res.json();
 
         if (data.user) setUserInfo(data.user);
+
+        // * user_profile
+        if (data.profile) {
+          setProfileInfo(data.profile);
+          if (data.profile.runner_nickname)
+            setInputNickname(data.profile.runner_nickname);
+          if (data.profile.motto) setInputMotto(data.profile.motto);
+        }
       } catch (error) {
         console.error("데이터 로드 실패:", error);
       }
@@ -53,6 +72,40 @@ export default function ProfilePage() {
 
     fetchUserData();
   }, []);
+
+  const handleSaveProfile = async () => {
+    setIsSaving(true);
+
+    try {
+      // 보낼 데이터 준비 (빈 문자열이면 null로 처리)
+      const payload = {
+        runner_nickname: inputNickname.trim() === "" ? null : inputNickname,
+        motto: inputMotto.trim() === "" ? null : inputMotto,
+      };
+
+      // API로 데이터 전송
+      const res = await fetch("/api/profileSave", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.ok) {
+        setToast("프로필이 저장되었습니다.");
+        // 저장 성공 시 현재 상태 업데이트
+        setProfileInfo(payload);
+      } else {
+        const errorData = await res.json();
+        setToast(errorData.message || "저장에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Profile save error:", error);
+      setToast("서버 오류가 발생했습니다.");
+    } finally {
+      setIsSaving(false);
+      setTimeout(() => setToast(""), 3000);
+    }
+  };
 
   const handleLogout = async () => {
     setIsLoading(true);
@@ -128,6 +181,10 @@ export default function ProfilePage() {
             </label>
             <input
               type="text"
+              id="nickname"
+              value={inputNickname}
+              onChange={(e) => setInputNickname(e.target.value)}
+              placeholder={defaultNickname}
               className="bg-[#242E35] w-52.5 h-10 rounded-md text-[#CBD5E1] text-sm focus:outline-none text-center"
             />
           </div>
@@ -141,18 +198,27 @@ export default function ProfilePage() {
               <div className="bg-[#242E35] w-52.5 h-17.5 rounded-md flex items-center justify-center px-3">
                 <div
                   contentEditable
-                  onInput={(e) => setText(e.currentTarget.textContent || "")}
+                  onInput={(e) =>
+                    setInputMotto(e.currentTarget.textContent || "")
+                  }
                   suppressContentEditableWarning
                   className="w-full text-center text-[#CBD5E1] text-sm outline-none wrap-break-words"
-                />
+                >
+                  {profileInfo?.motto || ""}
+                </div>
               </div>
 
               {/* 버튼 */}
               <button
-                className="text-white px-4 h-7 w-14 rounded-2xl bg-[#1E7F4F] text-xs
-                flex items-center justify-center hover:bg-[#196e43] shrink-0 absolute right-5"
+                onClick={handleSaveProfile}
+                disabled={isSaving}
+                className={`text-white px-4 h-7 w-14 rounded-2xl text-xs flex items-center justify-center shrink-0 absolute right-5 ${
+                  isSaving
+                    ? "bg-gray-500 cursor-not-allowed"
+                    : "bg-[#1E7F4F] hover:bg-[#196e43]"
+                }`}
               >
-                Save
+                {isSaving ? "..." : "Save"}
               </button>
             </div>
           </div>
