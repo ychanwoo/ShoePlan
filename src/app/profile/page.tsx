@@ -2,8 +2,10 @@
 
 import HeaderBar from "@/components/common/HeaderBar";
 import TabBar from "@/components/common/TabBar";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import GoogleIcon from "@/assets/google.svg";
+import NaverIcon from "@/assets/naver.svg";
+import KakaoIcon from "@/assets/kakao.png";
 import Link from "next/link";
 import {
   LogOut,
@@ -11,15 +13,46 @@ import {
   ScrollText,
   ShieldCheck,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+
+interface UserInfo {
+  id: string;
+  email: string;
+  nickname: string;
+  profile_image: string | null;
+  provider: string;
+}
+
+const PROVIDER_ICONS: Record<string, StaticImageData | string> = {
+  google: GoogleIcon,
+  naver: NaverIcon,
+  kakao: KakaoIcon,
+};
 
 export default function ProfilePage() {
   const [text, setText] = useState("");
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const [toast, setToast] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const router = useRouter();
+
+  //* users DB에서 사용자 로그인 정보 가져오기
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const res = await fetch("/api/me");
+        const data = await res.json();
+
+        if (data.user) setUserInfo(data.user);
+      } catch (error) {
+        console.error("데이터 로드 실패:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleLogout = async () => {
     setIsLoading(true);
@@ -38,6 +71,11 @@ export default function ProfilePage() {
       setIsLoading(false);
     }
   };
+
+  const defaultNickname = userInfo?.id
+    ? `Runner${String(parseInt(userInfo.id.slice(0, 6), 16) % 1000000).padStart(6, "0")}`
+    : "Runner...";
+
   return (
     <>
       <HeaderBar title="Profile" />
@@ -45,19 +83,39 @@ export default function ProfilePage() {
       <section className="space-y-5 pb-28 h-[calc(100vh-11vh)] overflow-y-auto">
         {/* profile 영역 */}
         <div className="flex pt-5">
-          <div className="w-16 h-16 rounded-full ml-7 bg-[#8FA68E]" />
+          {/* 프로필 이미지 (DB에 이미지가 있으면 사용 없으면 기본 초록색 원) */}
+          {userInfo?.profile_image ? (
+            <div className="relative w-16 h-16 ml-7 rounded-full overflow-hidden shrink-0">
+              <Image
+                src={userInfo.profile_image}
+                alt="profile image"
+                fill
+                className="object-cover"
+              />
+            </div>
+          ) : (
+            <div className="w-16 h-16 rounded-full ml-7 bg-[#8FA68E] shrink-0" />
+          )}
+
           <div className="flex-1 font-extralight space-y-3 ml-7 mt-1">
-            <p className="text-white">Ychanwoo</p>
-            <p className="text-[#CBD5E1] text-sm">example@google.com</p>
+            <p className="text-white">
+              {userInfo?.nickname || defaultNickname}
+            </p>
+            <p className="text-[#CBD5E1] text-sm">
+              {userInfo?.email || "이메일 불러오기 일시적 오류"}
+            </p>
           </div>
 
-          <Image
-            src={GoogleIcon}
-            alt="login-account image"
-            width={30}
-            height={30}
-            className="mt-7 mr-5"
-          />
+          {/* provider에 따른 로그인 아이콘 이미지 변경 */}
+          {userInfo?.provider && PROVIDER_ICONS[userInfo.provider] && (
+            <Image
+              src={PROVIDER_ICONS[userInfo.provider]}
+              alt={`${userInfo.provider} login`}
+              width={30}
+              height={30}
+              className="mt-7 mr-5 w-7.5 h-7.5"
+            />
+          )}
         </div>
         {/* 하단 구분선*/}
         <div className="h-px bg-[#242E35]" />
