@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // 1. 쿠키에서 로그인 정보(oauthId) 확인
   const oauthId = request.cookies.get("oauthId")?.value;
 
