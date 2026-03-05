@@ -86,7 +86,7 @@ export default function HomeClient() {
 
   return (
     <>
-      <HeaderBar title="Home" />
+      <HeaderBar title="Home" showInfo />
 
       <div className="h-[calc(100vh-11vh)] overflow-y-auto pb-100">
         <div className="flex flex-col items-center relative top-25">
