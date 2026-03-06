@@ -26,6 +26,7 @@ export default function StatsPage() {
     model: "",
     distance: "",
     type: "",
+    shoeAge: "",
   });
 
   //* 기존 저장된 데이터 가져오기
@@ -50,6 +51,7 @@ export default function StatsPage() {
           model: data.shoe_model || "",
           distance: data.running_distance || "",
           type: data.running_type || "",
+          shoeAge: data.shoe_age || "",
         });
       }
     } catch (error) {
@@ -78,6 +80,7 @@ export default function StatsPage() {
           type: value.type,
           brand: value.brand,
           model: value.model,
+          shoeAge: value.shoeAge,
         }),
       });
 
@@ -216,6 +219,7 @@ export default function StatsPage() {
               model: "",
               distance: value.distance,
               type: value.type,
+              shoeAge: "0개월",
             });
             setOpen(null);
           }}
@@ -230,7 +234,7 @@ export default function StatsPage() {
           options={MODELS[value.brand] ?? []}
           value={value.model}
           onSelect={(item) => {
-            setValue((prev) => ({ ...prev, model: item }));
+            setValue((prev) => ({ ...prev, model: item, shoeAge: "0개월" }));
             setOpen(null);
           }}
           onClose={() => setOpen(null)}

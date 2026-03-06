@@ -10,10 +10,10 @@ export const MODELS: Record<(typeof BRANDS)[number], string[]> = {
 };
 
 export const DISTANCE_OPTIONS = [
-  "20km 미만",
-  "20~50km",
+  "50km 미만",
   "50~100km",
-  "100~300km",
+  "100~200km",
+  "200~300km",
   "300km 이상",
 ];
 

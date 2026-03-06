@@ -18,14 +18,11 @@ export default function HomeClient() {
   // 신발 수명 계산
   useEffect(() => {
     const loadUserData = async () => {
-      // 1. sessionStorage에서 가져오기
       const sessionResult = calculateShoeLife();
 
       if (sessionResult) {
-        // sessionStorage에 데이터가 있으면 바로 사용
         setShoeLife(sessionResult);
       } else {
-        // 2. sessionStorage에 없으면 DB에서 가져오기
         try {
           const response = await fetch("/api/me");
           const data = await response.json();
@@ -44,9 +41,12 @@ export default function HomeClient() {
               shoeAge: data.profile.shoe_age,
               shoeBrand: data.profile.shoe_brand,
               shoeModel: data.profile.shoe_model,
+              updatedAt: data.profile.updated_at || data.profile.created_at,
+              accumulatedDistance: data.profile.accumulated_distance || 0,
             };
             const result = calculateShoeLife(shoeData);
             setShoeLife(result);
+            return;
           }
         } catch (error) {
           console.error("Failed to load user data:", error);
