@@ -9,10 +9,14 @@ import {
   RUNNING_TYPE_OPTIONS,
 } from "@/constants/selectModalOptions";
 import { ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 export default function StatsPage() {
+  const pathname = usePathname();
   const [isRunning, setIsRunning] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [, setIsFetching] = useState(true);
   const [open, setOpen] = useState<
     null | "brand" | "model" | "distance" | "type"
   >(null);
@@ -23,6 +27,75 @@ export default function StatsPage() {
     distance: "",
     type: "",
   });
+
+  //* 기존 저장된 데이터 가져오기
+  const fetchUserData = useCallback(async () => {
+    setIsFetching(true);
+    try {
+      const response = await fetch("/api/updateStats", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        console.warn("데이터를 불러오지 못했습니다. 로그인이 필요합니다.");
+        return;
+      }
+
+      const { data } = await response.json();
+
+      if (data) {
+        setValue({
+          brand: data.shoe_brand || "",
+          model: data.shoe_model || "",
+          distance: data.running_distance || "",
+          type: data.running_type || "",
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    } finally {
+      setIsFetching(false);
+    }
+  }, []);
+
+  // * 경로가 stats일 경우 리렌더링
+  useEffect(() => {
+    if (pathname === "/stats") fetchUserData();
+  }, [pathname, fetchUserData]);
+
+  //* update 되는 이벤트 핸들러
+  const handleSave = async () => {
+    if (loading) return;
+    setLoading(true);
+
+    try {
+      const response = await fetch("/api/updateStats", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          distance: value.distance,
+          type: value.type,
+          brand: value.brand,
+          model: value.model,
+        }),
+      });
+
+      if (response.ok) {
+        alert("러닝 데이터 저장 성공! 🏃‍♂️");
+        fetchUserData();
+      } else {
+        const errorData = await response.json();
+        alert("저장 실패: " + errorData.error);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("오류 발생");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <HeaderBar title="Stats" />
@@ -123,8 +196,9 @@ export default function StatsPage() {
           className="w-20 h-8.5 bg-[#1E7F4F] hover:bg-[#1e7f4ece] rounded-2xl text-white
             flex justify-center
             relative left-70 top-3 font-light mb-30"
+          onClick={handleSave}
         >
-          <button>Save</button>
+          <button disabled={loading}>{loading ? "Saving..." : "Save"}</button>
         </div>
       </div>
 
