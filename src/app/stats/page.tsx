@@ -20,6 +20,11 @@ export default function StatsPage() {
   const [open, setOpen] = useState<
     null | "brand" | "model" | "distance" | "type"
   >(null);
+  // 러닝화 교체 관련 상태
+  const [shoeConfirm, setShowConfirm] = useState(false);
+  const [pendingOpen, setPendingOpen] = useState<"brand" | "model" | null>(
+    null,
+  );
 
   const [value, setValue] = useState({
     brand: "",
@@ -99,6 +104,28 @@ export default function StatsPage() {
     }
   };
 
+  //* 러닝화 변경 시 실행되는 함수
+  const handleShoeChangeRequest = (type: "brand" | "model") => {
+    // 이미 신발이 등록되어 있는 상태에서 변경하려고 할 때만 모달을 띄움
+    if (value.brand || value.model) {
+      setPendingOpen(type);
+      setShowConfirm(true);
+    }
+  };
+
+  //* 모달에서 예를 눌렀을 때
+  const handleConfirmYes = () => {
+    if (pendingOpen) setOpen(pendingOpen);
+    setShowConfirm(false);
+    setPendingOpen(null);
+  };
+
+  //* 모달에서 아니오를 눌렀을 때
+  const handleConfirmNo = () => {
+    setShowConfirm(false);
+    setPendingOpen(null);
+  };
+
   return (
     <>
       <HeaderBar title="Stats" />
@@ -141,7 +168,7 @@ export default function StatsPage() {
               <span>Brand</span>
               <button
                 className="flex items-center gap-2 border-b border-[#CBD5E1] w-40 justify-center"
-                onClick={() => setOpen("brand")}
+                onClick={() => handleShoeChangeRequest("brand")}
               >
                 <span>{value.brand || "Select"}</span>
                 <ChevronDown className="text-[#CBD5E1] relative left-5" />
@@ -154,7 +181,7 @@ export default function StatsPage() {
               <button
                 disabled={!value.brand}
                 className="flex items-center gap-2 border-b border-[#CBD5E1] w-40 justify-center disabled:text-[#cbd5e149]"
-                onClick={() => setOpen("model")}
+                onClick={() => handleShoeChangeRequest("model")}
               >
                 <span>{value.model || "Select"}</span>
                 <ChevronDown className="text-[#CBD5E1] relative left-5" />
@@ -206,6 +233,48 @@ export default function StatsPage() {
       </div>
 
       <TabBar />
+
+      {shoeConfirm && (
+        <div className="fixed inset-0 z-100 flex items-center justify-center">
+          <div
+            className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-110 bg-black/60"
+            onClick={handleConfirmNo}
+          />
+          <div className="relative z-10 bg-[#1B242C] text-white px-6 py-6 rounded-2xl shadow-2xl border border-[#242E35] w-[80%] max-w-sm flex flex-col gap-5">
+            <div className="flex flex-col items-center text-center mt-2">
+              <div className="w-10 h-10 flex items-center justify-center rounded-full bg-[#1E7F4F] text-xl font-bold mb-4">
+                !
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2">
+                신발 변경 알림
+              </h3>
+              <p className="text-[#CBD5E1] text-sm font-medium leading-relaxed">
+                새 러닝화 구매하셨나요? <br />
+                새로운 신발로 저장 시{" "}
+                <span className="text-[#1E7F4F] font-bold">
+                  수명이 초기화
+                </span>{" "}
+                됩니다.
+              </p>
+            </div>
+
+            <div className="flex gap-3 mt-2">
+              <button
+                onClick={handleConfirmNo}
+                className="flex-1 py-3 rounded-xl bg-[#242E35] text-[#CBD5E1] text-sm font-medium hover:bg-slate-700 transition-colors"
+              >
+                아니오
+              </button>
+              <button
+                onClick={handleConfirmYes}
+                className="flex-1 py-3 rounded-xl bg-[#1E7F4F] text-white text-sm font-medium hover:bg-[#16663f] transition-colors"
+              >
+                예
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {open === "brand" && (
         <SelectModal
