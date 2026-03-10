@@ -111,6 +111,8 @@ export async function POST(req: Request) {
       newAccumulatedDistance += oldDailyDistance * passedDays;
     }
 
+    newAccumulatedDistance = Math.round(newAccumulatedDistance);
+
     const updatePayload: UpdatePayload = {};
 
     if (body.distance !== undefined && body.distance !== "")
