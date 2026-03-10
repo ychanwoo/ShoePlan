@@ -212,7 +212,7 @@ export default function ProfilePage() {
               <button
                 onClick={handleSaveProfile}
                 disabled={isSaving}
-                className={`text-white px-4 h-7 w-14 rounded-2xl text-xs flex items-center justify-center shrink-0 absolute right-5 ${
+                className={`text-white px-4 h-7 w-14 rounded-2xl text-xs flex items-center justify-center shrink-0 ml-[15vw] ${
                   isSaving
                     ? "bg-gray-500 cursor-not-allowed"
                     : "bg-[#1E7F4F] hover:bg-[#196e43]"
