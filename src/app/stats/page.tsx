@@ -138,11 +138,13 @@ export default function StatsPage() {
           <div className="flex flex-col gap-y-2 w-75 text-[#CBD5E1] ml-5">
             <span>Running distance (Monthly)</span>
             <button
-              className="flex items-center gap-2 border-b border-[#CBD5E1] w-30 justify-center"
+              className="flex items-center gap-2 border-b border-[#CBD5E1] min-w-30 w-fit justify-center"
               onClick={() => setOpen("distance")}
             >
-              <span>{value.distance || "Select"}</span>
-              <ChevronDown className="text-[#CBD5E1] relative left-5" />
+              <span className="whitespace-nowrap">
+                {value.distance || "Select"}
+              </span>
+              <ChevronDown className="text-[#CBD5E1] shrink-0" />
             </button>
           </div>
 
@@ -150,11 +152,13 @@ export default function StatsPage() {
           <div className="ml-5 pt-6 flex flex-col gap-y-2 w-75 text-[#CBD5E1]">
             <span>Running Type</span>
             <button
-              className="flex items-center gap-2 border-b border-[#CBD5E1] w-30 justify-center disabled:text-[#cbd5e149]"
+              className="flex items-center gap-2 border-b border-[#CBD5E1] min-w-30 w-fit justify-center disabled:text-[#cbd5e149]"
               onClick={() => setOpen("type")}
             >
-              <span>{value.type || "Select"}</span>
-              <ChevronDown className="text-[#CBD5E1] relative left-5" />
+              <span className="whitespace-nowrap pl-2">
+                {value.type || "Select"}
+              </span>
+              <ChevronDown className="text-[#CBD5E1] shrink-0" />
             </button>
           </div>
         </div>
@@ -167,11 +171,13 @@ export default function StatsPage() {
             <div className="ml-5 flex items-center gap-x-10 w-75 text-[#CBD5E1]">
               <span>Brand</span>
               <button
-                className="flex items-center gap-2 border-b border-[#CBD5E1] w-40 justify-center"
+                className="flex items-center gap-2 border-b border-[#CBD5E1] min-w-30 w-fit justify-center"
                 onClick={() => handleShoeChangeRequest("brand")}
               >
-                <span>{value.brand || "Select"}</span>
-                <ChevronDown className="text-[#CBD5E1] relative left-5" />
+                <span className="whitespace-nowrap pl-2">
+                  {value.brand || "Select"}
+                </span>
+                <ChevronDown className="text-[#CBD5E1] shrink-0" />
               </button>
             </div>
 
@@ -180,11 +186,13 @@ export default function StatsPage() {
               <span>Model</span>
               <button
                 disabled={!value.brand}
-                className="flex items-center gap-2 border-b border-[#CBD5E1] w-40 justify-center disabled:text-[#cbd5e149]"
+                className="flex items-center gap-2 border-b border-[#CBD5E1] min-w-30 w-fit justify-center disabled:text-[#cbd5e149]"
                 onClick={() => handleShoeChangeRequest("model")}
               >
-                <span>{value.model || "Select"}</span>
-                <ChevronDown className="text-[#CBD5E1] relative left-5" />
+                <span className="whitespace-nowrap pl-2">
+                  {value.model || "Select"}
+                </span>
+                <ChevronDown className="text-[#CBD5E1] shrink-0" />
               </button>
             </div>
           </div>
