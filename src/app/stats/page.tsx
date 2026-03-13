@@ -58,6 +58,7 @@ export default function StatsPage() {
           type: data.running_type || "",
           shoeAge: data.shoe_age || "",
         });
+        setIsRunning(data.is_running ?? true);
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -71,7 +72,7 @@ export default function StatsPage() {
     if (pathname === "/stats") fetchUserData();
   }, [pathname, fetchUserData]);
 
-  //* update 되는 이벤트 핸들러
+  //* save버튼 클릭 시 update 되는 이벤트 핸들러
   const handleSave = async () => {
     if (loading) return;
     setLoading(true);
@@ -86,6 +87,7 @@ export default function StatsPage() {
           brand: value.brand,
           model: value.model,
           shoeAge: value.shoeAge,
+          isRunning: isRunning,
         }),
       });
 
