@@ -31,6 +31,7 @@ export async function POST(req: Request) {
         shoe_age: parsed.shoeAge,
         shoe_brand: parsed.shoeBrand,
         shoe_model: parsed.shoeModel,
+        is_running: true,
       },
       { onConflict: "oauth_id" }, // 이미 존재하면 update
     );

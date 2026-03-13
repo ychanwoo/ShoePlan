@@ -10,6 +10,7 @@ interface UpdatePayload {
   shoe_age?: string;
   updated_at?: string;
   accumulated_distance?: number;
+  is_running?: boolean;
 }
 
 const supabase = createClient(
@@ -28,7 +29,9 @@ export async function GET() {
 
     const { data, error } = await supabase
       .from("user_profile")
-      .select("running_distance, running_type, shoe_brand, shoe_model")
+      .select(
+        "running_distance, running_type, shoe_brand, shoe_model, is_running",
+      )
       .eq("oauth_id", oauthId)
       .maybeSingle();
 
@@ -98,7 +101,10 @@ export async function POST(req: Request) {
 
       //  마지막 저장일부터 오늘까지 며칠 지났는지 계산하는 로직
       let passedDays = 0;
-      if (oldData.updated_at || oldData.created_at) {
+      if (
+        oldData.is_running !== false &&
+        (oldData.updated_at || oldData.created_at)
+      ) {
         const lastSavedDate = new Date(
           oldData.updated_at || oldData.created_at,
         );
@@ -125,6 +131,7 @@ export async function POST(req: Request) {
       updatePayload.shoe_model = body.model;
     if (body.shoeAge !== undefined && body.shoeAge !== "")
       updatePayload.shoe_age = body.shoeAge;
+    if (body.isRunning !== undefined) updatePayload.is_running = body.isRunning;
 
     updatePayload.accumulated_distance = newAccumulatedDistance;
     updatePayload.updated_at = new Date().toISOString();

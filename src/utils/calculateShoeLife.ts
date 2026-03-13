@@ -9,6 +9,7 @@ export interface SessionShoeData {
   shoeModel: string;
   updatedAt?: string;
   accumulatedDistance: number;
+  isRunning?: boolean;
 }
 
 export interface ShoeLifeResult {
@@ -124,7 +125,7 @@ export function calculateShoeLife(
      날짜 차이 계산
   -------------------------------- */
   let passedDays = 0;
-  if (data.updatedAt) {
+  if (data.updatedAt && data.isRunning !== false) {
     const lastSavedDate = new Date(data.updatedAt);
     const today = new Date();
 
