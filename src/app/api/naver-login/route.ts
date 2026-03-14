@@ -67,7 +67,7 @@ export async function POST(req: Request) {
     response.cookies.set("oauthId", user.oauth_id, {
       httpOnly: true,
       path: "/",
-      maxAge: 60 * 60 * 24, // 1일
+      maxAge: 60 * 60 * 24 * 30,
     });
 
     return response;

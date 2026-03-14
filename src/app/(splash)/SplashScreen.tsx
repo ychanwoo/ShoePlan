@@ -8,12 +8,27 @@ import { useRouter } from "next/navigation";
 export default function SplashScreen() {
   const router = useRouter();
 
-  // 2.5초 후 start 페이지로 이동
+  // oauthID확인 후 /home or /start
   useEffect(() => {
-    const timer = setTimeout(() => {
-      router.replace("/start");
-    }, 2500);
-    return () => clearTimeout(timer);
+    const checkAuthAndNavigate = async () => {
+      const timer = new Promise((resolve) => setTimeout(resolve, 2500));
+
+      const authCheck = fetch("/api/login-check");
+
+      try {
+        const [, response] = await Promise.all([timer, authCheck]);
+
+        if (response.ok) {
+          router.replace("/home");
+        } else {
+          router.replace("/start");
+        }
+      } catch (error) {
+        console.log("oauthID 확인 불가", error);
+        router.replace("/start");
+      }
+    };
+    checkAuthAndNavigate();
   }, [router]);
 
   return (
