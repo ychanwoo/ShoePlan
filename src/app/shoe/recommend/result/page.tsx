@@ -1,7 +1,6 @@
 import HeaderBar from "@/components/common/HeaderBar";
 import TabBar from "@/components/common/TabBar";
 import Image from "next/image";
-import exShoe from "@/assets/example-shoe.png";
 import { Share } from "lucide-react";
 import Link from "next/link";
 
@@ -17,13 +16,18 @@ export default function ResultPage() {
             Nike Zoom X Invincible Run 3
           </p>
           <div className="flex justify-center overflow-hidden">
-            <Image src={exShoe} alt="ex-shoe image" width={150} height={150} />
+            <Image
+              src="/preview-images/nb-1080.webp"
+              alt="ex-shoe image"
+              width={150}
+              height={150}
+            />
           </div>
         </div>
         {/* Why this shoe */}
         <div className="text-[#CBD5E1] pt-5">
           <h2 className="font-semibold pl-5 pb-1">🧠 Why this shoe?</h2>
-          <div className="bg-[#242E35] w-96 h-30 rounded-2xl">
+          <div className="bg-[#242E35] w-100 h-30 rounded-2xl mx-auto">
             <p className="text-sm px-5 pt-7">
               입력하신 러닝 스타일을 기준으로 가장 잘 맞는 러닝화입니다. 쿠션과
               안정감의 균형이 좋아, 현재 러닝화에서 느끼셨던 쿠션감 부족과
@@ -37,7 +41,7 @@ export default function ResultPage() {
           <div className="flex justify-center gap-x-14">
             <div className="flex-col text-center">
               <Image
-                src={exShoe}
+                src="/preview-images/nb-1080.webp"
                 alt="ex-shoe image"
                 width={140}
                 height={140}
@@ -47,7 +51,7 @@ export default function ResultPage() {
             </div>
             <div className="flex-col text-center">
               <Image
-                src={exShoe}
+                src="/preview-images/nb-1080.webp"
                 alt="ex-shoe image"
                 width={140}
                 height={140}
