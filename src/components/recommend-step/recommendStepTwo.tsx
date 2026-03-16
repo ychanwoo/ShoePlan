@@ -5,6 +5,10 @@ import PrevBtn from "../button/PrevBtn";
 import NextBtn from "../button/NextBtn";
 import { StepNavigationProps } from "@/types/StepNavigationProps";
 
+interface Props extends StepNavigationProps {
+  onSelect: (values: string[]) => void;
+}
+
 const options = [
   { id: 1, label: "쿠션이 부족했다" },
   { id: 2, label: "쿠션이 너무 말랑했다" },
@@ -19,8 +23,21 @@ const options = [
 export default function RecommendStepTwoPage({
   onPrev,
   onNext,
-}: StepNavigationProps) {
+  onSelect,
+}: Props) {
   const [selected, setSelected] = useState<number[]>([]);
+
+  const handleNext = () => {
+    if (selected.length === 0) {
+      alert("아쉬운 점을 최소 1개 이상 선택해 주세요!");
+      return;
+    }
+    const selectedLabels = options
+      .filter((opt) => selected.includes(opt.id))
+      .map((opt) => opt.label);
+    onSelect(selectedLabels);
+    onNext();
+  };
   return (
     <div className="pt-5 pb-25 h-[calc(100vh-11vh)] overflow-y-auto">
       <p className="text-center text-[#CBD5E1] text-sm pt-10">
@@ -67,7 +84,7 @@ export default function RecommendStepTwoPage({
       {/* 버튼 영역 - 화면 하단에 좌우 배치 */}
       <div className="flex justify-between px-8 mt-45">
         <PrevBtn onClick={onPrev}>← Prev</PrevBtn>
-        <NextBtn onClick={onNext}>Next →</NextBtn>
+        <NextBtn onClick={handleNext}>Next →</NextBtn>
       </div>
     </div>
   );

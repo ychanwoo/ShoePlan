@@ -4,7 +4,9 @@ import { useState } from "react";
 import PrevBtn from "../button/PrevBtn";
 import NextBtn from "../button/NextBtn";
 import { StepNavigationProps } from "@/types/StepNavigationProps";
-import Link from "next/link";
+interface Props extends StepNavigationProps {
+  onSelect: (values: string[]) => void;
+}
 
 const options = [
   { id: 1, label: "쿠션감이 좋았다" },
@@ -20,8 +22,21 @@ const options = [
 export default function RecommendStepThreePage({
   onPrev,
   onNext,
-}: StepNavigationProps) {
+  onSelect,
+}: Props) {
   const [selected, setSelected] = useState<number[]>([]);
+
+  const handleNext = () => {
+    if (selected.length === 0) {
+      alert("좋은 점을 최소 1개 이상 선택해 주세요!");
+      return;
+    }
+    const selectedLabels = options
+      .filter((opt) => selected.includes(opt.id))
+      .map((opt) => opt.label);
+    onSelect(selectedLabels);
+    onNext();
+  };
   return (
     <div className="pt-5 pb-25 h-[calc(100vh-11vh)] overflow-y-auto">
       <p className="text-center text-[#CBD5E1] text-sm pt-10">
@@ -33,7 +48,7 @@ export default function RecommendStepThreePage({
         <div>●●●</div>
       </div>
 
-      {/* Current Shoe - Cons */}
+      {/* Current Shoe - Pros */}
       <div className="text-[#CBD5E1] ml-10">
         <h3 className="text-xl mb-3">Current Shoe - Pros</h3>
         <p>현재 신고있는 러닝화에서</p>
@@ -68,9 +83,7 @@ export default function RecommendStepThreePage({
       {/* 버튼 영역 - 화면 하단에 좌우 배치 */}
       <div className="flex justify-between px-8 mt-45">
         <PrevBtn onClick={onPrev}>← Prev</PrevBtn>
-        <Link href="/shoe/recommend/result" className="text-sm">
-          <NextBtn onClick={onNext}>결과보기</NextBtn>
-        </Link>
+        <NextBtn onClick={handleNext}>결과보기</NextBtn>
       </div>
     </div>
   );

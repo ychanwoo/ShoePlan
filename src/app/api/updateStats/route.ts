@@ -11,6 +11,10 @@ interface UpdatePayload {
   updated_at?: string;
   accumulated_distance?: number;
   is_running?: boolean;
+  // recommend 추가 데이터
+  running_place?: string;
+  shoe_pros?: string;
+  shoe_cons?: string;
 }
 
 const supabase = createClient(
@@ -30,7 +34,7 @@ export async function GET() {
     const { data, error } = await supabase
       .from("user_profile")
       .select(
-        "running_distance, running_type, shoe_brand, shoe_model, is_running",
+        "running_distance, running_type, shoe_brand, shoe_model, is_running, running_distance, shoe_pros, shoe-_ons",
       )
       .eq("oauth_id", oauthId)
       .maybeSingle();
@@ -132,6 +136,15 @@ export async function POST(req: Request) {
     if (body.shoeAge !== undefined && body.shoeAge !== "")
       updatePayload.shoe_age = body.shoeAge;
     if (body.isRunning !== undefined) updatePayload.is_running = body.isRunning;
+    if (body.runningPlace !== undefined && body.runningPlace !== "")
+      updatePayload.running_place = body.runningPlace;
+    if (body.shoePros && body.shoePros.length > 0) {
+      updatePayload.shoe_pros = body.shoePros;
+    }
+
+    if (body.shoeCons && body.shoeCons.length > 0) {
+      updatePayload.shoe_cons = body.shoeCons;
+    }
 
     updatePayload.accumulated_distance = newAccumulatedDistance;
     updatePayload.updated_at = new Date().toISOString();

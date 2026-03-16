@@ -4,10 +4,23 @@ import { useState } from "react";
 import NextBtn from "../button/NextBtn";
 import { StepNavigationProps } from "@/types/StepNavigationProps";
 
+interface Props extends StepNavigationProps {
+  onSelect: (value: string) => void;
+}
+
 const options = ["Road (아스팔트)", "Track (트랙)", "Mixed (혼합)"];
 
-export default function RecommendStepOnePage({ onNext }: StepNavigationProps) {
+export default function RecommendStepOnePage({ onNext, onSelect }: Props) {
   const [selected, setSelected] = useState<string | null>(null);
+
+  const handleNext = () => {
+    if (!selected) {
+      alert("러닝 장소를 선택해 주세요!");
+      return;
+    }
+    onSelect(selected);
+    onNext();
+  };
   return (
     <div className="pt-5 pb-25 h-[calc(100vh-11vh)] overflow-y-auto">
       <p className="text-center text-[#CBD5E1] text-sm pt-10">
@@ -19,9 +32,9 @@ export default function RecommendStepOnePage({ onNext }: StepNavigationProps) {
         <div>●○○</div>
       </div>
 
-      {/* Running Type 설명 */}
+      {/* Running place 설명 */}
       <div className="text-[#CBD5E1] ml-10">
-        <h3 className="text-xl mb-3">Running Type</h3>
+        <h3 className="text-xl mb-3">Running Place</h3>
         <p>주로 어디에서 러닝을 즐기시나요?</p>
       </div>
 
@@ -47,7 +60,7 @@ export default function RecommendStepOnePage({ onNext }: StepNavigationProps) {
 
       {/* 버튼 영역 - 화면 하단에 좌우 배치 */}
       <div className="flex justify-end px-8 mt-45">
-        <NextBtn onClick={onNext}>Next →</NextBtn>
+        <NextBtn onClick={handleNext}>Next →</NextBtn>
       </div>
     </div>
   );
