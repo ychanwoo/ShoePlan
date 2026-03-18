@@ -7,9 +7,14 @@ import { InfoPopover } from "../homeTab/InfoPopover";
 export interface HeaderBarProps {
   title: string;
   showInfo?: boolean;
+  hideBackBtn?: boolean;
 }
 
-export default function HeaderBar({ title, showInfo }: HeaderBarProps) {
+export default function HeaderBar({
+  title,
+  showInfo,
+  hideBackBtn,
+}: HeaderBarProps) {
   const router = useRouter();
   return (
     <header className="w-full min-h-17 pt-3 shrink-0 bg-[#2F3A43]">
@@ -17,13 +22,15 @@ export default function HeaderBar({ title, showInfo }: HeaderBarProps) {
       <div className="flex items-center justify-between px-4 h-14 text-[#CBD5E1]">
         {/* 왼족 */}
         <div className="flex items-center">
-          <button
-            type="button"
-            onClick={() => router.back()}
-            aria-label="go to previous page"
-          >
-            <ArrowLeft className="w-6 h-6 hover:text-[#cbd5e1a5]" />
-          </button>
+          {!hideBackBtn && (
+            <button
+              type="button"
+              onClick={() => router.back()}
+              aria-label="go to previous page"
+            >
+              <ArrowLeft className="w-6 h-6 hover:text-[#cbd5e1a5]" />
+            </button>
+          )}
           <span className="text-sm absolute left-1/2 -translate-x-1/2">
             {title}
           </span>

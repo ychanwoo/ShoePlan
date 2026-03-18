@@ -1,68 +1,117 @@
+"use client";
 import HeaderBar from "@/components/common/HeaderBar";
 import TabBar from "@/components/common/TabBar";
 import Image from "next/image";
 import { Share } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Shoe } from "@/data/shoeDB";
+import { getRecommendations } from "@/utils/recommendAlgorithm";
+interface RecommendResult {
+  bestMatch: Shoe & { score: number; matchedReasons: string[] };
+  alternatives: (Shoe & { score: number; matchedReasons: string[] })[];
+  reasonText: string;
+}
 
 export default function ResultPage() {
+  const [result, setResult] = useState<RecommendResult | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAndRecommend = async () => {
+      try {
+        const [res] = await Promise.all([
+          fetch("/api/updateStats"),
+          new Promise((resolve) => setTimeout(resolve, 3000)),
+        ]);
+        const json = await res.json();
+
+        if (json.data) {
+          const recommendation = getRecommendations(json.data);
+          setResult(recommendation as RecommendResult);
+        }
+      } catch (error) {
+        console.error("데이터 로딩 에러", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAndRecommend();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="h-screen bg-[#2F3941] flex flex-col items-center justify-center text-[#CBD5E1]">
+        <div className="w-10 h-10 border-4 border-[#1E7F4F] border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p className="animate-pulse">유저 데이터를 분석 중입니다...</p>
+      </div>
+    );
+  }
+
+  if (!result) {
+    return (
+      <div className="h-screen bg-[#2F3941] flex items-center justify-center">
+        <p className="text-white">
+          결과를 불러올 수 없습니다. 다시 시도해 주세요.
+        </p>
+      </div>
+    );
+  }
+
+  const { bestMatch, alternatives, reasonText } = result;
+
   return (
     <>
-      <HeaderBar title="Result" />
+      <HeaderBar title="Result" hideBackBtn={true} />
       <div className="pt-5 pb-25 h-[calc(100vh-11vh)] overflow-y-auto">
         {/* Best Match */}
         <div className="text-[#CBD5E1] pl-5">
           <h2 className="font-semibold pb-3">🏆 Best Match</h2>
-          <p className="font-light text-center pb-2">
-            Nike Zoom X Invincible Run 3
-          </p>
+          <p className="font-light text-center pb-2">{bestMatch.name}</p>
           <div className="flex justify-center overflow-hidden">
             <Image
-              src="/preview-images/nb-1080.webp"
-              alt="ex-shoe image"
+              src={bestMatch.image}
+              alt={bestMatch.name}
               width={150}
               height={150}
+              className="rounded-md"
             />
           </div>
         </div>
         {/* Why this shoe */}
         <div className="text-[#CBD5E1] pt-5">
           <h2 className="font-semibold pl-5 pb-1">🧠 Why this shoe?</h2>
-          <div className="bg-[#242E35] w-100 h-30 rounded-2xl mx-auto">
-            <p className="text-sm px-5 pt-7">
-              입력하신 러닝 스타일을 기준으로 가장 잘 맞는 러닝화입니다. 쿠션과
-              안정감의 균형이 좋아, 현재 러닝화에서 느끼셨던 쿠션감 부족과
-              전체적 밸런스를 보완해줍니다.
-            </p>
+          <div className="bg-[#242E35] w-100 h-30 rounded-2xl mx-auto mt-1">
+            <p className="text-sm px-5 pt-7">{reasonText}</p>
           </div>
         </div>
         {/* Picks */}
         <div className="text-[#CBD5E1] pt-5">
           <h2 className="pl-5 font-semibold">🥈 Alternative Picks</h2>
-          <div className="flex justify-center gap-x-14">
-            <div className="flex-col text-center">
-              <Image
-                src="/preview-images/nb-1080.webp"
-                alt="ex-shoe image"
-                width={140}
-                height={140}
-              />
-              <p>On Running Max</p>
-              <p className="text-[#CBD5E1] text-xs">가벼운 착용감 중심</p>
-            </div>
-            <div className="flex-col text-center">
-              <Image
-                src="/preview-images/nb-1080.webp"
-                alt="ex-shoe image"
-                width={140}
-                height={140}
-              />
-              <p>Zoom Vomero 3</p>
-              <p className="text-[#CBD5E1] text-xs">쿠션감 중심 러닝화</p>
-            </div>
+          <div className="flex justify-center gap-x-20 mt-5">
+            {alternatives.map((alt) => (
+              <div key={alt.id} className="flex-col text-center w-35">
+                <div className="flex justify-center h-25 items-center mb-2">
+                  <Image
+                    src={alt.image}
+                    alt={alt.name}
+                    width={120}
+                    height={120}
+                    className="object-contain rounded-md"
+                  />
+                </div>
+                {/* 신발 이름 (길면 한 줄로 자름) */}
+                <p className="text-sm font-medium line-clamp-1 pt-3">
+                  {alt.name}
+                </p>
+                <p className="text-[#5e967a] text-xs">{alt.tags[0]} 중심</p>
+              </div>
+            ))}
           </div>
         </div>
         {/* buttons */}
-        <div className="flex justify-between px-8 pt-5">
+        <div className="flex justify-between px-13 pt-5">
           <button className="text-white text-sm w-29 h-8.75 rounded-2xl bg-[#6B7280] flex items-center justify-center hover:bg-[#6b7280cc]">
             <Share size={15} className="mr-1" />
             Share
