@@ -1,6 +1,7 @@
 "use client";
 
 import HeaderBar from "@/components/common/HeaderBar";
+import Loading from "@/components/common/Loading";
 import TabBar from "@/components/common/TabBar";
 import ShoeLifeProgress from "@/components/homeTab/ShoeLifeProgress";
 import {
@@ -14,53 +15,47 @@ import { useEffect, useState } from "react";
 export default function HomeClient() {
   const [shoeLife, setShoeLife] = useState<ShoeLifeResult | null>(null);
   const [oauthId, setOauthId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // 신발 수명 계산
   useEffect(() => {
     const loadUserData = async () => {
-      const sessionResult = calculateShoeLife();
-
-      if (sessionResult) {
-        setShoeLife(sessionResult);
-      } else {
-        try {
-          const response = await fetch("/api/me");
-          const data = await response.json();
-
-          if (data.oauthId) {
-            setOauthId(data.oauthId);
-          }
-
-          if (data.profile) {
-            const shoeData: SessionShoeData = {
-              height: data.profile.height,
-              weight: data.profile.weight,
-              runningDistance: data.profile.running_distance,
-              runningDistanceCustom: data.profile.running_distance_custom,
-              runningType: data.profile.running_type,
-              shoeAge: data.profile.shoe_age,
-              shoeBrand: data.profile.shoe_brand,
-              shoeModel: data.profile.shoe_model,
-              updatedAt: data.profile.updated_at || data.profile.created_at,
-              accumulatedDistance: data.profile.accumulated_distance || 0,
-            };
-            const result = calculateShoeLife(shoeData);
-            setShoeLife(result);
-            return;
-          }
-        } catch (error) {
-          console.error("Failed to load user data:", error);
-        }
-      }
+      setIsLoading(true);
 
       try {
         const response = await fetch("/api/me");
         const data = await response.json();
+
         if (data.oauthId) {
           setOauthId(data.oauthId);
         }
+
+        const sessionResult = calculateShoeLife();
+
+        if (sessionResult) {
+          // 세션에 데이터가 있으면 그대로 사용
+          setShoeLife(sessionResult);
+        } else if (data.profile) {
+          // 세션엔 없지만 DB에 데이터가 있으면 계산해서 사용
+          const shoeData: SessionShoeData = {
+            height: data.profile.height,
+            weight: data.profile.weight,
+            runningDistance: data.profile.running_distance,
+            runningDistanceCustom: data.profile.running_distance_custom,
+            runningType: data.profile.running_type,
+            shoeAge: data.profile.shoe_age,
+            shoeBrand: data.profile.shoe_brand,
+            shoeModel: data.profile.shoe_model,
+            updatedAt: data.profile.updated_at || data.profile.created_at,
+            accumulatedDistance: data.profile.accumulated_distance || 0,
+          };
+          const result = calculateShoeLife(shoeData);
+          setShoeLife(result);
+        }
       } catch (error) {
-        console.error("Failed to fetch oauthId:", error);
+        console.error("데이터 로드 실패:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -68,6 +63,8 @@ export default function HomeClient() {
   }, []);
 
   useSyncSessionToDB(oauthId);
+
+  if (isLoading) return <Loading />;
 
   if (!shoeLife) return null;
   const remainmingKm = shoeLife.recommendedLife - shoeLife.usedDistance;

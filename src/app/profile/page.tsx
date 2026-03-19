@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Loading from "@/components/common/Loading";
 
 interface UserInfo {
   id: string;
@@ -40,7 +41,7 @@ export default function ProfilePage() {
   // Logout
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const [toast, setToast] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   // user / userInfo
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [profileInfo, setProfileInfo] = useState<ProfileInfo | null>(null);
@@ -52,6 +53,7 @@ export default function ProfilePage() {
   //* users DB에서 사용자 로그인 정보 가져오기
   useEffect(() => {
     const fetchUserData = async () => {
+      setIsLoading(true);
       try {
         const res = await fetch("/api/me");
         const data = await res.json();
@@ -67,6 +69,8 @@ export default function ProfilePage() {
         }
       } catch (error) {
         console.error("데이터 로드 실패:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -124,6 +128,8 @@ export default function ProfilePage() {
       setIsLoading(false);
     }
   };
+
+  if (isLoading) return Loading();
 
   const defaultNickname = userInfo?.id
     ? `Runner${String(parseInt(userInfo.id.slice(0, 6), 16) % 1000000).padStart(6, "0")}`
