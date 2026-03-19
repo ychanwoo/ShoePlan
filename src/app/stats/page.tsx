@@ -11,12 +11,13 @@ import {
 import { ChevronDown } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import Loading from "@/components/common/Loading";
 
 export default function StatsPage() {
   const pathname = usePathname();
   const [isRunning, setIsRunning] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const [, setIsFetching] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [open, setOpen] = useState<
     null | "brand" | "model" | "distance" | "type"
   >(null);
@@ -45,7 +46,7 @@ export default function StatsPage() {
 
   //* 기존 저장된 데이터 가져오기
   const fetchUserData = useCallback(async () => {
-    setIsFetching(true);
+    setIsLoading(true);
     try {
       const response = await fetch("/api/updateStats", {
         method: "GET",
@@ -72,7 +73,7 @@ export default function StatsPage() {
     } catch (error) {
       console.error("Error fetching user data:", error);
     } finally {
-      setIsFetching(false);
+      setIsLoading(false);
     }
   }, []);
 
@@ -83,8 +84,8 @@ export default function StatsPage() {
 
   //* save버튼 클릭 시 update 되는 이벤트 핸들러
   const handleSave = async () => {
-    if (loading) return;
-    setLoading(true);
+    if (isSaving) return;
+    setIsSaving(true);
 
     try {
       const response = await fetch("/api/updateStats", {
@@ -120,7 +121,7 @@ export default function StatsPage() {
         message: "저장 중 오류가 발생했습니다. 다시 시도해 주세요.",
       });
     } finally {
-      setLoading(false);
+      setIsSaving(false);
     }
   };
 
@@ -145,6 +146,8 @@ export default function StatsPage() {
     setShowConfirm(false);
     setPendingOpen(null);
   };
+
+  if (isLoading) return <Loading />;
 
   return (
     <>
@@ -256,7 +259,7 @@ export default function StatsPage() {
             relative left-70 top-3 font-light mb-30"
           onClick={handleSave}
         >
-          <button disabled={loading}>{loading ? "Saving..." : "Save"}</button>
+          <button disabled={isSaving}>{isSaving ? "Saving..." : "Save"}</button>
         </div>
       </div>
 
