@@ -25,6 +25,10 @@ export default function StatsPage() {
   const [pendingOpen, setPendingOpen] = useState<"brand" | "model" | null>(
     null,
   );
+  const [modalConfig, setModalConfig] = useState({
+    isOpen: false,
+    message: "",
+  });
 
   const [value, setValue] = useState({
     brand: "",
@@ -33,6 +37,11 @@ export default function StatsPage() {
     type: "",
     shoeAge: "",
   });
+
+  // * 모달 닫기
+  const closeModal = () => {
+    setModalConfig({ isOpen: false, message: "" });
+  };
 
   //* 기존 저장된 데이터 가져오기
   const fetchUserData = useCallback(async () => {
@@ -92,15 +101,24 @@ export default function StatsPage() {
       });
 
       if (response.ok) {
-        alert("러닝 데이터 저장 성공! 🏃‍♂️");
+        setModalConfig({
+          isOpen: true,
+          message: "러닝 데이터 저장 성공~! 🏃‍♂️",
+        });
         fetchUserData();
       } else {
         const errorData = await response.json();
-        alert("저장 실패: " + errorData.error);
+        setModalConfig({
+          isOpen: true,
+          message: `저장 실패.. 다시 시도해 주세요.` + errorData.error,
+        });
       }
     } catch (err) {
       console.error(err);
-      alert("오류 발생");
+      setModalConfig({
+        isOpen: true,
+        message: "저장 중 오류가 발생했습니다. 다시 시도해 주세요.",
+      });
     } finally {
       setLoading(false);
     }
@@ -346,6 +364,30 @@ export default function StatsPage() {
           }}
           onClose={() => setOpen(null)}
         />
+      )}
+
+      {/* 저장 시 뜨는 모달 */}
+      {modalConfig.isOpen && (
+        <div
+          className="fixed inset-0 z-50 w-110 mx-auto flex items-center justify-center bg-black/60 transition-opacity"
+          onClick={closeModal}
+        >
+          <div
+            className="bg-[#242E35] w-80 rounded-2xl p-6 flex flex-col items-center shadow-xl transform transition-all"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="text-[#CBD5E1] text-center font-medium mb-6 mt-2">
+              {modalConfig.message}
+            </p>
+
+            <button
+              onClick={closeModal}
+              className="w-full h-11 bg-[#1E7F4F] hover:bg-[#196e43] text-white font-medium rounded-xl transition-colors"
+            >
+              확인
+            </button>
+          </div>
+        </div>
       )}
     </>
   );
