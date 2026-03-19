@@ -7,15 +7,29 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Shoe } from "@/data/shoeDB";
 import { getRecommendations } from "@/utils/recommendAlgorithm";
+import Script from "next/script";
+import { KakaoShareParams } from "@/types/kakaoShareParams";
 interface RecommendResult {
   bestMatch: Shoe & { score: number; matchedReasons: string[] };
   alternatives: (Shoe & { score: number; matchedReasons: string[] })[];
   reasonText: string;
 }
+declare global {
+  interface Window {
+    Kakao: {
+      init: (key: string) => void;
+      isInitialized: () => boolean;
+      Share: {
+        sendDefault: (params: KakaoShareParams) => void;
+      };
+    };
+  }
+}
 
 export default function ResultPage() {
   const [result, setResult] = useState<RecommendResult | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isKakaoLoaded, setIsKakaoLoaded] = useState(false);
 
   useEffect(() => {
     const fetchAndRecommend = async () => {
@@ -40,6 +54,47 @@ export default function ResultPage() {
     fetchAndRecommend();
   }, []);
 
+  const shareToKakao = () => {
+    if (!isKakaoLoaded || !window.Kakao) {
+      alert("공유 기능을 준비 중입니다. 잠시 후 다시 시도해주세요.");
+      return;
+    }
+
+    if (!result) return;
+
+    const { bestMatch } = result;
+    const shareUrl = window.location.href;
+
+    window.Kakao.Share.sendDefault({
+      objectType: "feed",
+      content: {
+        title: "👟 ShoePlan: 나만의 러닝화 추천 결과",
+        description: `제게 딱 맞는 러닝화는 '${bestMatch.name}' 입니다!`,
+        imageUrl: "https://i.imgur.com/i3NPkiP.jpeg",
+        link: {
+          mobileWebUrl: shareUrl,
+          webUrl: shareUrl,
+        },
+      },
+      buttons: [
+        {
+          title: "결과 보러가기",
+          link: {
+            mobileWebUrl: shareUrl,
+            webUrl: shareUrl,
+          },
+        },
+        {
+          title: "나도 추천받기",
+          link: {
+            mobileWebUrl: window.location.origin,
+            webUrl: window.location.origin,
+          },
+        },
+      ],
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="h-screen bg-[#2F3941] flex flex-col items-center justify-center text-[#CBD5E1]">
@@ -63,6 +118,22 @@ export default function ResultPage() {
 
   return (
     <>
+      <Script
+        src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"
+        integrity="sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4"
+        crossOrigin="anonymous"
+        onReady={() => {
+          if (window.Kakao && !window.Kakao.isInitialized()) {
+            const kakaoKey = process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY;
+            if (kakaoKey) {
+              window.Kakao.init(kakaoKey);
+              setIsKakaoLoaded(true);
+            } else {
+              console.error("환경변수에 카카오 JS 키가 없습니다.");
+            }
+          }
+        }}
+      />
       <HeaderBar title="Result" hideBackBtn={true} />
       <div className="pt-5 pb-25 h-[calc(100vh-11vh)] overflow-y-auto">
         {/* Best Match */}
@@ -112,7 +183,10 @@ export default function ResultPage() {
         </div>
         {/* buttons */}
         <div className="flex justify-between px-13 pt-5">
-          <button className="text-white text-sm w-29 h-8.75 rounded-2xl bg-[#6B7280] flex items-center justify-center hover:bg-[#6b7280cc]">
+          <button
+            onClick={shareToKakao}
+            className="text-white text-sm w-29 h-8.75 rounded-2xl bg-[#6B7280] flex items-center justify-center hover:bg-[#6b7280cc]"
+          >
             <Share size={15} className="mr-1" />
             Share
           </button>
