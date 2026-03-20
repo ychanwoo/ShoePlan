@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import Loading from "@/components/common/Loading";
 
 function GoogleCallbackContent() {
   const searchParams = useSearchParams();
@@ -29,12 +30,12 @@ function GoogleCallbackContent() {
     login();
   }, [searchParams, router]);
 
-  return <div>구글 로그인 처리중...</div>;
+  return <Loading />;
 }
 
 export default function GoogleCallbackPage() {
   return (
-    <Suspense fallback={<div>네이버 로그인 처리중...</div>}>
+    <Suspense fallback={<Loading />}>
       <GoogleCallbackContent />
     </Suspense>
   );

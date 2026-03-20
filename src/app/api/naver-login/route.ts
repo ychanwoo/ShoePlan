@@ -48,7 +48,7 @@ export async function POST(req: Request) {
         .insert({
           oauth_id: naverUser.id,
           email: naverUser.email,
-          nickname: naverUser.nickname,
+          nickname: naverUser.name,
           profile_image: naverUser.profile_image,
           provider: "naver",
         })
