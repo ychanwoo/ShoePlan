@@ -1,8 +1,8 @@
 import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 interface InfoPopoverProps {
   children: React.ReactNode;
@@ -10,18 +10,20 @@ interface InfoPopoverProps {
 
 export function InfoPopover({ children }: InfoPopoverProps) {
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <button aria-label="Info">{children}</button>
-      </PopoverTrigger>
+    <HoverCard openDelay={200} closeDelay={100}>
+      <HoverCardTrigger asChild>
+        {/* 데스크탑에서는 hover, 모바일에서는 터치 시 작동 */}
+        <button aria-label="Info" className="cursor-pointer">
+          {children}
+        </button>
+      </HoverCardTrigger>
 
-      <PopoverContent
+      <HoverCardContent
         side="bottom"
         align="end"
         sideOffset={8}
         className="w-64 text-sm bg-[#3b4853] text-gray-200 border border-[#242E35] shadow-xl"
       >
-        {" "}
         <ul className="space-y-1">
           <li>
             • <span className="font-medium">80% 이상</span>: 아직 여유 있어요
@@ -40,7 +42,7 @@ export function InfoPopover({ children }: InfoPopoverProps) {
           * 러닝화는 겉보다 <span className="font-medium">쿠션 수명</span>이 더
           중요해요
         </div>
-      </PopoverContent>
-    </Popover>
+      </HoverCardContent>
+    </HoverCard>
   );
 }
