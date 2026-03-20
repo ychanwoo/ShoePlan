@@ -218,7 +218,7 @@ export default function ProfilePage() {
               <button
                 onClick={handleSaveProfile}
                 disabled={isSaving}
-                className={`text-white px-4 h-7 w-14 rounded-2xl text-xs flex items-center justify-center shrink-0 ml-[15vw] ${
+                className={`text-white h-7 w-14 rounded-2xl text-xs flex items-center justify-center shrink-0 ml-[10vw] min-[380px]:ml-[13vw] min-[420px]:ml-[17vw] min-[700px]:ml-[10vw] min-[1000px]:ml-[7vw] min-[1500px]:ml-[5vw] ${
                   isSaving
                     ? "bg-gray-500 cursor-not-allowed"
                     : "bg-[#1E7F4F] hover:bg-[#196e43]"
