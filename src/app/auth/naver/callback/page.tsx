@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
-export default function NaverCallbackPage() {
+function NaverCallbackContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -32,4 +32,12 @@ export default function NaverCallbackPage() {
   }, [searchParams, router]);
 
   return <div>네이버 로그인 처리중...</div>;
+}
+
+export default function NaverCallbackPage() {
+  return (
+    <Suspense fallback={<div>네이버 로그인 처리중...</div>}>
+      <NaverCallbackContent />
+    </Suspense>
+  );
 }
