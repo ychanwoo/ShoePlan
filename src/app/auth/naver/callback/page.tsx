@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import Loading from "@/components/common/Loading";
 
 function NaverCallbackContent() {
   const searchParams = useSearchParams();
@@ -31,12 +32,12 @@ function NaverCallbackContent() {
     login();
   }, [searchParams, router]);
 
-  return <div>네이버 로그인 처리중...</div>;
+  return <Loading />;
 }
 
 export default function NaverCallbackPage() {
   return (
-    <Suspense fallback={<div>네이버 로그인 처리중...</div>}>
+    <Suspense fallback={<Loading />}>
       <NaverCallbackContent />
     </Suspense>
   );
