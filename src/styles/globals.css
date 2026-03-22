@@ -10,6 +10,12 @@ body {
   overflow-x: hidden;
   overscroll-behavior-y: none;
 }
+@media (max-width: 450px) {
+  html,
+  body {
+    background-color: #2f3941;
+  }
+}
 
 /* 전역으로 적용 (이것만 해도 바로 보임) */
 .swiper {

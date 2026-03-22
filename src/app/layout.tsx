@@ -24,7 +24,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body>
+      <body className="bg-[#374151]">
         <MobileFrame>{children}</MobileFrame>
       </body>
     </html>
