@@ -19,7 +19,7 @@ export function GoogleLoginBtn() {
     <button
       type="button"
       onClick={handleLogin}
-      className="relative flex items-center w-75 h-11.25 rounded-xl top-65 mx-auto bg-white border"
+      className="relative flex items-center w-75 h-11.25 rounded-xl mx-auto bg-white border"
     >
       <span className="absolute left-8 flex items-center justify-center">
         <GoogleIcon />

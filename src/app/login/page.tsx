@@ -5,25 +5,53 @@ import LogoImg from "@/assets/logo.svg";
 import { GoogleLoginBtn } from "@/components/button/GoogleLoginBtn";
 import { KakaoLoginBtn } from "@/components/button/KakaoLoginBtn";
 import { NaverLoginBtn } from "@/components/button/NaverLoginBtn";
+import { useEffect, useState } from "react";
+import RecentLoginBubble from "@/components/common/RecentLoginBubble";
 
 export default function LoginPage() {
-  // * 임시 코드 /home경로로 이동하는 흐름 파악 위해 작성 (추후 제거)
+  const [lastLoggedIn, setLastLoggedIn] = useState<string | null>(null);
+
+  useEffect(() => {
+    const savedLoginMethod = localStorage.getItem("lastLoggedIn");
+    if (savedLoginMethod) {
+      setLastLoggedIn(savedLoginMethod);
+    }
+  }, []);
   return (
     <>
-      <div className="pb-70">
-        <div className="flex justify-center relative top-50">
-          <Image src={LogoImg} alt="Logo-image" width={300} height={300} />
+      <div className="login-page">
+        <div className="login-logo-wrap flex justify-center relative top-42">
+          <Image
+            src={LogoImg}
+            alt="Logo-image"
+            width={340}
+            height={340}
+            className="login-logo"
+          />
         </div>
 
-        <p className="text-[#CBD5E1] text-sm text-center relative top-45">
+        <p className="login-subtitle text-[#CBD5E1] text-sm text-center relative top-45">
           1분만에 로그인 하기
         </p>
 
-        <div className="space-y-6">
-          {/* 임시로 카카오 버튼 클릭 시 home 경로로 이동 */}
-          <KakaoLoginBtn />
-          <GoogleLoginBtn />
-          <NaverLoginBtn />
+        <div className="login-buttons space-y-6 relative w-full mt-[clamp(12rem,26vh,15rem)]">
+          {/* 카카오 */}
+          <div className="relative w-75 mx-auto">
+            {lastLoggedIn === "kakao" && <RecentLoginBubble />}
+            <KakaoLoginBtn />
+          </div>
+
+          {/* 구글 */}
+          <div className="relative w-75 mx-auto">
+            {lastLoggedIn === "google" && <RecentLoginBubble />}
+            <GoogleLoginBtn />
+          </div>
+
+          {/* 네이버 */}
+          <div className="relative w-75 mx-auto">
+            {lastLoggedIn === "naver" && <RecentLoginBubble />}
+            <NaverLoginBtn />
+          </div>
         </div>
       </div>
     </>

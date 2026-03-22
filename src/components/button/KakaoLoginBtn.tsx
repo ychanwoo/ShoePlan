@@ -30,7 +30,7 @@ export function KakaoLoginBtn() {
     <button
       type="button"
       onClick={handleLogin}
-      className="relative flex items-center w-75 h-11.25 rounded-xl top-65 mx-auto bg-[#FEE500]"
+      className="relative flex items-center w-75 h-11.25 rounded-xl mx-auto bg-[#FEE500]"
     >
       <span className="absolute left-8 flex items-center justify-center">
         <KakaoIcon />

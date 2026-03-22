@@ -23,6 +23,7 @@ function NaverCallbackContent() {
       });
 
       if (res.ok) {
+        localStorage.setItem("lastLoggedIn", "naver");
         router.replace("/home");
       } else {
         alert("네이버 로그인 실패");

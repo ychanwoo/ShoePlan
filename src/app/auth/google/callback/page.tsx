@@ -21,6 +21,7 @@ function GoogleCallbackContent() {
       });
 
       if (res.ok) {
+        localStorage.setItem("lastLoggedIn", "google");
         router.replace("/home");
       } else {
         alert("구글 로그인 실패");
