@@ -2,7 +2,7 @@
 
 import LogoImg from "@/assets/logo.svg";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Picker from "react-mobile-picker";
 import { StepNavigationProps } from "@/types/StepNavigationProps";
 import NextBtn from "../button/NextBtn";
@@ -26,6 +26,18 @@ export default function StepOnePage({ onNext }: StepNavigationProps) {
     setValue((prev) => ({ ...prev, [key]: val }));
     setSurveyData({ [key]: val });
   };
+
+  // * Bottom sheet 열릴 떄 body 스크롤 방지
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [open]);
 
   return (
     <>
@@ -89,7 +101,7 @@ export default function StepOnePage({ onNext }: StepNavigationProps) {
 
       {/* Bottom Sheet + Picker */}
       {open && (
-        <div className="fixed inset-0 bg-black/50 text-[#CBD5E1] flex items-end z-50 w-110 mx-auto">
+        <div className="fixed inset-0 bg-black/50 text-[#CBD5E1] flex items-end z-50 w-110 mx-auto overscroll-none">
           <div className="w-full bg-[#27323A] rounded-t-2xl p-6">
             <Picker
               value={{ [open]: value[open] }}

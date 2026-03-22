@@ -21,6 +21,7 @@ function KakaoCallbackContent() {
       });
 
       if (res.ok) {
+        localStorage.setItem("lastLoggedIn", "kakao");
         router.replace("/home");
       } else {
         alert("카카오 로그인 실패");

@@ -6,7 +6,9 @@
 html,
 body {
   margin: 0;
-  height: 100vh;
+  min-height: 100%;
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
 }
 
 /* 전역으로 적용 (이것만 해도 바로 보임) */
@@ -37,6 +39,15 @@ body {
 
 .animate-fade-scale {
   animation: fadeScale 1.5s ease-out forwards;
+}
+
+/* iPhone SE: scale login section proportionally to avoid bottom clipping */
+@media (max-width: 390px) and (max-height: 740px) {
+  .login-page {
+    width: 100%;
+    transform: scale(0.84);
+    transform-origin: top center;
+  }
 }
 
 /*---break---*/
@@ -162,6 +173,6 @@ body {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
   }
 }
