@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 export default function TabBar() {
   const pathName = usePathname();
   return (
-    <div className="w-full max-w-110 h-21.75 bg-[#242E35] flex justify-around fixed bottom-0">
+    <div className="w-full max-w-110 h-21.75 bg-[#242E35] flex justify-around fixed -bottom-2">
       {/* Home tab */}
       <Link
         href="/home"

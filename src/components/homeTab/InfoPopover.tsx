@@ -1,8 +1,8 @@
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface InfoPopoverProps {
   children: React.ReactNode;
@@ -10,19 +10,18 @@ interface InfoPopoverProps {
 
 export function InfoPopover({ children }: InfoPopoverProps) {
   return (
-    <HoverCard openDelay={200} closeDelay={100}>
-      <HoverCardTrigger asChild>
-        {/* 데스크탑에서는 hover, 모바일에서는 터치 시 작동 */}
+    <Popover>
+      <PopoverTrigger asChild>
         <button aria-label="Info" className="cursor-pointer">
           {children}
         </button>
-      </HoverCardTrigger>
+      </PopoverTrigger>
 
-      <HoverCardContent
+      <PopoverContent
         side="bottom"
         align="end"
         sideOffset={8}
-        className="w-64 text-sm bg-[#3b4853] text-gray-200 border border-[#242E35] shadow-xl"
+        className="w-64 text-sm bg-[#3b4853] text-gray-200 border border-[#242E35] shadow-xl z-99"
       >
         <ul className="space-y-1">
           <li>
@@ -38,11 +37,11 @@ export function InfoPopover({ children }: InfoPopoverProps) {
             • <span className="font-medium">30% 이하</span>: 새 신발 고민해볼 때
           </li>
         </ul>
-        <div className="mt-3 pt-2 border-t text-xs text-gray-400">
+        <div className="mt-3 pt-2 border-t border-gray-600 text-xs text-gray-400">
           * 러닝화는 겉보다 <span className="font-medium">쿠션 수명</span>이 더
           중요해요
         </div>
-      </HoverCardContent>
-    </HoverCard>
+      </PopoverContent>
+    </Popover>
   );
 }
