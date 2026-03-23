@@ -139,15 +139,17 @@ export default function ResultPage() {
         {/* Best Match */}
         <div className="text-[#CBD5E1] pl-5">
           <h2 className="font-semibold pb-3">🏆 Best Match</h2>
-          <p className="font-light text-center pb-2">{bestMatch.name}</p>
-          <div className="flex justify-center overflow-hidden">
-            <Image
-              src={bestMatch.image}
-              alt={bestMatch.name}
-              width={150}
-              height={150}
-              className="rounded-md"
-            />
+          <div className="flex flex-col mr-3">
+            <p className="font-light text-center pb-2">{bestMatch.name}</p>
+            <div className="flex justify-center overflow-hidden">
+              <Image
+                src={bestMatch.image}
+                alt={bestMatch.name}
+                width={150}
+                height={150}
+                className="rounded-md"
+              />
+            </div>
           </div>
         </div>
         {/* Why this shoe */}

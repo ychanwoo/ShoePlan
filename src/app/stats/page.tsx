@@ -256,7 +256,7 @@ export default function StatsPage() {
         <div
           className="w-20 h-8.5 bg-[#1E7F4F] hover:bg-[#1e7f4ece] rounded-2xl text-white
             flex justify-center
-            relative left-70 top-3 font-light mb-30"
+            relative left-70 top-3 font-light mb-30 max-[361px]:left-60"
           onClick={handleSave}
         >
           <button disabled={isSaving}>{isSaving ? "Saving..." : "Save"}</button>
@@ -372,7 +372,7 @@ export default function StatsPage() {
       {/* 저장 시 뜨는 모달 */}
       {modalConfig.isOpen && (
         <div
-          className="fixed inset-0 z-50 w-110 mx-auto flex items-center justify-center bg-black/60 transition-opacity"
+          className="fixed inset-0 z-50 max-w-110 mx-auto flex items-center justify-center bg-black/60 transition-opacity"
           onClick={closeModal}
         >
           <div

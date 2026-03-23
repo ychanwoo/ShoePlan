@@ -14,7 +14,7 @@ export default function RecommendStepModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 w-110 mx-auto flex items-center justify-center bg-black/60 transition-opacity"
+      className="fixed inset-0 z-50 max-w-110 mx-auto flex items-center justify-center bg-black/60 transition-opacity"
       onClick={onClose}
     >
       <div
