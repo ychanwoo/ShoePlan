@@ -268,7 +268,7 @@ export default function StatsPage() {
       {shoeConfirm && (
         <div className="fixed inset-0 z-100 flex items-center justify-center">
           <div
-            className="absolute inset-0 left-1/2 -translate-x-1/2 max-w-110 bg-black/60"
+            className="absolute inset-0 mx-auto  max-w-110 bg-black/60"
             onClick={handleConfirmNo}
           />
           <div className="relative z-10 bg-[#1B242C] text-white px-6 py-6 rounded-2xl shadow-2xl border border-[#242E35] w-[80%] max-w-sm flex flex-col gap-5">
@@ -281,7 +281,7 @@ export default function StatsPage() {
               </h3>
               <p className="text-[#CBD5E1] text-sm font-medium leading-relaxed">
                 새 러닝화 구매하셨나요? <br />
-                새로운 신발로 저장 시{" "}
+                새로운 신발로 저장 시
                 <span className="text-[#1E7F4F] font-bold">
                   수명이 초기화
                 </span>{" "}

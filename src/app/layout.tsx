@@ -25,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body className="bg-[#383D47] min-h-dvh overflow-x-hidden relative">
+      <body className="bg-[#343C47] min-h-dvh overflow-x-hidden relative">
         <div className="hidden md:block fixed inset-0 z-0 pointer-events-none">
           {/* Left */}
           <div className="absolute left-10 top-20 opacity-10 select-none">
