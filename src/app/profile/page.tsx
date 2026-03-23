@@ -276,7 +276,7 @@ export default function ProfilePage() {
       {isLogoutOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div
-            className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-110 bg-black/60"
+            className="absolute inset-y-0 left-1/2 -translate-x-1/2 max-w-110 bg-black/60"
             onClick={() => !isLoading && setIsLogoutOpen(false)}
           />
 
