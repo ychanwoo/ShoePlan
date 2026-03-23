@@ -37,7 +37,7 @@ export async function POST(req: Request) {
       .select("*")
       .eq("oauth_id", naverUser.id)
       .eq("provider", "naver")
-      .single();
+      .maybeSingle();
 
     let user;
 
@@ -60,15 +60,21 @@ export async function POST(req: Request) {
     } else {
       user = existingUser;
     }
+    const response = NextResponse.json({ success: true, user });
 
-    // 여기서 JWT 발급하거나 세션 생성하면 됨
-    const response = NextResponse.json({ success: true });
-
-    response.cookies.set("oauthId", user.oauth_id, {
-      httpOnly: true,
+    const cookieOptions = {
       path: "/",
       maxAge: 60 * 60 * 24 * 30,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax" as const,
+    };
+
+    response.cookies.set("oauthId", user.oauth_id, {
+      ...cookieOptions,
+      httpOnly: true,
     });
+
+    response.cookies.set("provider", "naver", cookieOptions);
 
     return response;
   } catch (error) {
