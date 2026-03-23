@@ -63,16 +63,19 @@ export async function POST(req: Request) {
     }
 
     const response = NextResponse.json({ success: true, user });
+    const cookieOptions = {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 30,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax" as const,
+    };
+
     response.cookies.set("oauthId", user.oauth_id, {
+      ...cookieOptions,
       httpOnly: true,
-      path: "/",
-      maxAge: 60 * 60 * 24 * 30,
-    });
-    response.cookies.set("provider", "google", {
-      path: "/",
-      maxAge: 60 * 60 * 24 * 30,
     });
 
+    response.cookies.set("provider", "google", cookieOptions);
     return response;
   } catch (error) {
     console.error(error);
