@@ -5,18 +5,67 @@ import MainBtn from "@/components/button/MainBtn";
 import { calculateShoeLife } from "@/utils/calculateShoeLife";
 import { useEffect, useState } from "react";
 
+// * preview 이미지에 사용할 신발 리스트 (이미지 파일명)
 const shoes = [
+  // Nike
   "nike-pegasus",
+  "nike-vomero",
+  "nike-zoomfly",
   "nike-vaporfly",
-  "nike-zoomx",
-  "adidas-adiospro",
+  "nike-alphafly",
+
+  // Adidas
   "adidas-boston",
+  "adidas-adios-pro-3",
+  "adidas-evo-sl",
+  "adidas-adios-pro-4",
+  "adidas-supernova-rise",
+
+  // Puma
+  "puma-velocity",
+  "puma-deviate",
+  "puma-deviate-elite",
+  "puma-fast-r-elite",
+
+  // New Balance
+  "nb-freshfoam",
+  "nb-sc-trainer",
+  "nb-rebel",
+  "nb-sc-elite",
+  "nb-sc-pacer",
+
+  // Asics
   "asics-kayano",
+  "asics-novablast",
+  "asics-superblast",
   "asics-magicspeed",
   "asics-metaspeed",
-  "asics-nimbus",
-  "nb-1080",
-  "nb-fuelcell",
+
+  // Mizuno
+  "mizuno-inspire",
+  "mizuno-neo-vista",
+  "mizuno-rebellion-flash-2",
+  "mizuno-rebellion-pro-2",
+
+  // Hoka
+  "hoka-bondi",
+  "hoka-clifton",
+  "hoka-mach-x-2",
+  "hoka-skyward-x",
+  "hoka-mach-6",
+  "hoka-rocket-x-2",
+
+  // Saucony
+  "saucony-endorphin-speed-4",
+  "saucony-endorphin-pro-4",
+  "saucony-endorphin-elite",
+
+  // On
+  "on-cloudmonster",
+  "on-cloudmonster-hyper",
+  "on-cloudsurfer-max",
+  "on-cloudboom-max",
+  "on-cloudboom-strike",
 ];
 
 export default function PreviewPage() {
