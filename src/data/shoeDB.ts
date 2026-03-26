@@ -174,7 +174,7 @@ export const SHOES_DB: Shoe[] = [
     tags: ["Track (트랙)", "말랑한쿠션", "가벼움", "인터벌"],
     description:
       "카본 없이도 극강의 가벼움과 통통 튀는 반발력을 보여주는 펀(Fun) 런의 대명사입니다.",
-    image: "/preview-images/nb-rebel.webp",
+    image: "/preview-images/nb-rabel.webp",
   },
   {
     id: "nb-sc-elite",
@@ -202,7 +202,7 @@ export const SHOES_DB: Shoe[] = [
     id: "asics-kayano",
     name: "Asics Gel-Kayano",
     brand: "Asics",
-    tags: ["Road (아스팔트)", "안정감", "발목안정", "장거리"],
+    tags: ["Mixed (혼합)", "안정감", "발목안정", "장거리"],
     description:
       "과내전 방지 및 안정화의 대명사. 관절을 꽉 잡아주어 초보자부터 장거리 러너의 부상을 방지합니다.",
     image: "/preview-images/asics-kayano.webp",
@@ -220,7 +220,7 @@ export const SHOES_DB: Shoe[] = [
     id: "asics-superblast",
     name: "Asics Superblast",
     brand: "Asics",
-    tags: ["Road (아스팔트)", "슈퍼트레이너", "맥스쿠션", "경량성"],
+    tags: ["Mixed (혼합)", "슈퍼트레이너", "맥스쿠션", "경량성"],
     description:
       "압도적인 두께의 프리미엄 폼을 썼음에도 믿기 힘들 정도로 가벼운 '사기캐' 훈련화입니다.",
     image: "/preview-images/asics-superblast.webp",

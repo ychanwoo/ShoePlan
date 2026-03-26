@@ -67,18 +67,21 @@ export default function HomeClient() {
   if (isLoading) return <Loading />;
 
   if (!shoeLife) return null;
-  const remainmingKm = shoeLife.recommendedLife - shoeLife.usedDistance;
+  const remainmingKm = Math.max(
+    0,
+    shoeLife.recommendedLife - shoeLife.usedDistance,
+  );
   const remainingPercent = shoeLife.usagePercent;
-  let messeage = "";
+  let message = "";
 
   if (remainingPercent >= 80) {
-    messeage = "아직 여유 있어요";
+    message = "아직 여유 있어요";
   } else if (remainingPercent >= 50) {
-    messeage = "아직 사용하기 좋아요";
+    message = "아직 사용하기 좋아요";
   } else if (remainingPercent >= 30) {
-    messeage = "교체 시기 슬슬";
+    message = "교체 시기 슬슬";
   } else {
-    messeage = "새 신발 고민해볼 때";
+    message = "새 신발 고민해볼 때";
   }
 
   return (
@@ -92,7 +95,7 @@ export default function HomeClient() {
 
         <div className="text-[#CBD5E1] text-center relative top-40">
           {/* percentage에 따라 문구 조정 */}
-          <p className="font-light">{messeage}</p>
+          <p className="font-light">{message}</p>
           <p className="text-2xl">
             교체 권장 까지{" "}
             <span className="text-[#1E7F4F] font-semibold">
