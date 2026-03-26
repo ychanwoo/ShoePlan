@@ -3,10 +3,43 @@
 export const BRANDS = ["Nike", "Adidas", "Asics", "New Balance"];
 
 export const MODELS: Record<(typeof BRANDS)[number], string[]> = {
-  Nike: ["Pegasus", "Vaporfly", "Invincible"],
-  Adidas: ["Adizero Boston", "Adios Pro"],
-  Asics: ["Nimbus", "Kayano", "Magic Speed", "Meta Speed"],
-  "New Balance": ["1080", "FuelCell Rebel"],
+  Nike: ["Pegasus", "Vomero", "Zoom Fly", "Vaporfly", "Alphafly"],
+  Adidas: [
+    "Supernova Rise",
+    "Adizero Boston",
+    "Adizero Adios Pro 3",
+    "Adizero EVO SL",
+    "Adizero Adios Pro 4",
+  ],
+  Puma: [
+    "Velocity Nitro",
+    "Deviate Nitro",
+    "Deviate Nitro Elite",
+    "Fast-R Nitro Elite",
+  ],
+  "New Balance": [
+    "Fresh Foam X 1080",
+    "FuelCell SC Trainer",
+    "FuelCell Rebel",
+    "FuelCell SC Elite",
+    "FuelCell SC Pacer",
+  ],
+  Asics: ["Gel-Kayano", "Novablast", "Superblast", "Magic Speed", "Metaspeed"],
+  Mizuno: [
+    "Wave Inspire",
+    "Neo Vista",
+    "Wave Rebellion Flash 2",
+    "Wave Rebellion Pro 2",
+  ],
+  Hoka: ["Bondi", "Clifton", "Mach X2", "Skyward X", "Mach 6", "Rocket X2"],
+  Saucony: ["Endorphin Speed 4", "Endorphin Pro 4", "Endorphin Elite"],
+  On: [
+    "Cloudmonster",
+    "Cloudmonster Hyper",
+    "Cloudsurfer Next",
+    "Cloudboom Max",
+    "Cloudboom Strike",
+  ],
 };
 
 export const DISTANCE_OPTIONS = [

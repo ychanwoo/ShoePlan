@@ -101,7 +101,14 @@ export default function StepTwoPage({ onNext, onPrev }: StepNavigationProps) {
                     placeholder="____"
                     disabled={selected !== "직접입력"}
                     value={customKm}
-                    onChange={(e) => handleCustomChange(e.target.value)}
+                    onChange={(e) => {
+                      let value = e.target.value;
+                      value = value.replace(/[^0-9]/g, "");
+                      if (value.startsWith("0")) {
+                        value = value.replace(/^0+/, "");
+                      }
+                      handleCustomChange(value);
+                    }}
                     className="w-20 bg-transparent border-b border-gray-400 text-white text-center outline-none disabled:opacity-40"
                   />
                   km

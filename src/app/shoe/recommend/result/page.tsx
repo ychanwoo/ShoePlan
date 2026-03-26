@@ -162,7 +162,7 @@ export default function ResultPage() {
         {/* Picks */}
         <div className="text-[#CBD5E1] pt-5">
           <h2 className="pl-5 font-semibold">🥈 Alternative Picks</h2>
-          <div className="flex justify-center gap-x-20 mt-5">
+          <div className="flex justify-center gap-x-15 mt-5">
             {alternatives.map((alt) => (
               <div key={alt.id} className="flex-col text-center w-35">
                 <div className="flex justify-center h-25 items-center mb-2">
@@ -174,8 +174,8 @@ export default function ResultPage() {
                     className="object-contain rounded-md"
                   />
                 </div>
-                {/* 신발 이름 (길면 한 줄로 자름) */}
-                <p className="text-sm font-medium line-clamp-1 pt-3">
+                {/* 신발 이름 길면 줄바꿈 */}
+                <p className="text-sm font-medium pt-3 whitespace-nowrap">
                   {alt.name}
                 </p>
                 <p className="text-[#5e967a] text-xs">{alt.tags[0]} 중심</p>
@@ -184,7 +184,7 @@ export default function ResultPage() {
           </div>
         </div>
         {/* buttons */}
-        <div className="flex justify-between px-13 pt-5">
+        <div className="flex justify-center gap-x-20 pt-5">
           <button
             onClick={shareToKakao}
             className="text-white text-sm w-29 h-8.75 rounded-2xl bg-[#6B7280] flex items-center justify-center hover:bg-[#6b7280cc]"

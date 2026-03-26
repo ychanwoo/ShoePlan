@@ -42,19 +42,65 @@ export function calculateShoeLife(
      모델 기본 수명
   -------------------------------- */
   const modelBaseLife: Record<string, number> = {
-    Pegasus: 650,
+    // Nike
+    Pegasus: 700,
+    Vomero: 750,
+    "Zoom Fly": 600,
     Vaporfly: 400,
-    ZoomX: 700,
-    "Adizero Boston": 600,
-    "Adios Pro": 420,
-    Nimbus: 750,
-    Kayano: 750,
+    Alphafly: 350,
+
+    // Adidas
+    "Adizero Boston": 650,
+    "Adizero Adios Pro 3": 400,
+    "Adizero EVO SL": 550,
+    "Adizero Adios Pro 4": 400,
+    "Supernova Rise": 700,
+
+    // Puma
+    "Velocity Nitro": 700,
+    "Deviate Nitro": 600,
+    "Deviate Nitro Elite": 400,
+    "Fast-R Nitro Elite": 350,
+
+    // New Balance
+    "Fresh Foam X 1080": 750,
+    "FuelCell SC Trainer": 650,
+    "FuelCell Rebel": 550,
+    "FuelCell SC Elite": 400,
+    "FuelCell SC Pacer": 350,
+
+    // Asics
+    "Gel-Kayano": 800,
+    Novablast: 700,
+    Superblast: 650,
     "Magic Speed": 500,
-    "Meta Speed": 450,
-    "1080": 750,
-    "FuelCell Rebel": 500,
-    EndorphinSpeed: 500,
-    Triumph: 700,
+    Metaspeed: 400,
+
+    // Mizuno
+    "Wave Inspire": 750,
+    "Neo Vista": 650,
+    "Wave Rebellion Flash 2": 500,
+    "Wave Rebellion Pro 2": 400,
+
+    // Hoka
+    Bondi: 750,
+    Clifton: 700,
+    "Mach X2": 550,
+    "Skyward X": 650,
+    "Mach 6": 550,
+    "Rocket X2": 400,
+
+    // Saucony
+    "Endorphin Speed 4": 600,
+    "Endorphin Pro 4": 400,
+    "Endorphin Elite": 350,
+
+    // On
+    Cloudmonster: 700,
+    "Cloudmonster Hyper": 600,
+    "Cloudsurfer Next": 700,
+    "Cloudboom Max": 400,
+    "Cloudboom Strike": 350,
   };
 
   let recommendedLife = modelBaseLife[data.shoeModel] ?? 650;
