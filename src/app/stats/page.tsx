@@ -154,100 +154,179 @@ export default function StatsPage() {
       <HeaderBar title="Stats" />
 
       {/* Running modify */}
-      <div className="space-y-5 pt-10 h-[calc(100vh-11vh)] overflow-y-auto">
-        <div className="text-[#CBD5E1] bg-[#242E35] w-75 h-55 mx-auto pt-3 font-light rounded-2xl">
-          <h2 className="text-xl ml-5 pb-3">Running</h2>
-          {/* distance 선택 */}
-          <div className="flex flex-col gap-y-2 w-75 text-[#CBD5E1] ml-5">
-            <span>Running distance (Monthly)</span>
-            <button
-              className="flex items-center gap-2 border-b border-[#CBD5E1] min-w-30 w-fit justify-center"
-              onClick={() => setOpen("distance")}
-            >
-              <span className="whitespace-nowrap">
-                {value.distance || "Select"}
-              </span>
-              <ChevronDown className="text-[#CBD5E1] shrink-0" />
-            </button>
+      <div className="space-y-5 pt-10 h-[calc(100dvh-11vh)] overflow-y-auto">
+        <div className="bg-[#242E35] w-75 mx-auto py-5 rounded-2xl shadow-lg">
+          <div className="flex items-center gap-2 px-5 mb-5">
+            <div className="w-1.5 h-5 bg-[#1E7F4F] rounded-full"></div>
+            <h2 className="text-white text-lg font-semibold tracking-wide">
+              Running Profile
+            </h2>
           </div>
 
-          {/* type 선택 */}
-          <div className="ml-5 pt-6 flex flex-col gap-y-2 w-75 text-[#CBD5E1]">
-            <span>Running Type</span>
-            <button
-              className="flex items-center gap-2 border-b border-[#CBD5E1] min-w-30 w-fit justify-center disabled:text-[#cbd5e149]"
-              onClick={() => setOpen("type")}
-            >
-              <span className="whitespace-nowrap pl-2">
-                {value.type || "Select"}
-              </span>
-              <ChevronDown className="text-[#CBD5E1] shrink-0" />
-            </button>
+          <div className="flex flex-col gap-y-5 px-5">
+            {/* distance 선택 */}
+            <div className="flex flex-col gap-y-2">
+              <label className="flex items-baseline gap-1.5 pl-1">
+                <span className="text-sm font-medium text-[#CBD5E1]">
+                  Running Distance
+                </span>
+                <span className="text-[11px] font-light text-[#6B7280] uppercase tracking-wider">
+                  (Monthly)
+                </span>
+              </label>
+              <button
+                className="flex items-center justify-between w-full bg-[#1B242C] px-4 py-3 rounded-xl border border-[#374151] hover:border-[#1E7F4F] transition-colors focus:outline-none"
+                onClick={() => setOpen("distance")}
+              >
+                <span
+                  className={`text-sm ${value.distance ? "text-white" : "text-[#6B7280]"}`}
+                >
+                  {value.distance || "거리를 선택해주세요"}
+                </span>
+                <ChevronDown className="text-[#94A3B8] w-4 h-4 shrink-0" />
+              </button>
+            </div>
+
+            {/* type 선택 */}
+            <div className="flex flex-col gap-y-2">
+              <label className="flex items-baseline gap-1.5 pl-1">
+                <span className="text-sm font-medium text-[#CBD5E1]">
+                  Running Type
+                </span>
+              </label>
+              <button
+                className="flex items-center justify-between w-full bg-[#1B242C] px-4 py-3 rounded-xl border border-[#374151] hover:border-[#1E7F4F] transition-colors focus:outline-none"
+                onClick={() => setOpen("type")}
+              >
+                <span
+                  className={`text-sm ${value.type ? "text-white" : "text-[#6B7280]"}`}
+                >
+                  {value.type || "타입을 선택해주세요"}
+                </span>
+                <ChevronDown className="text-[#94A3B8] w-4 h-4 shrink-0" />
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Running shoe */}
-        <div className="text-[#CBD5E1] bg-[#242E35] w-75 h-40 mx-auto pt-3 rounded-2xl font-light">
-          <h2 className="text-xl ml-5 pb-3">Running Shoe</h2>
-          <div className="text-[#CBD5E1] space-y-8">
+        <div className="bg-[#242E35] w-75 mx-auto py-5 rounded-2xl shadow-lg">
+          <div className="flex items-center gap-2 px-5 mb-5">
+            <div className="w-1.5 h-5 bg-[#1E7F4F] rounded-full"></div>
+            <h2 className="text-white text-lg font-semibold tracking-wide">
+              Running Shoe
+            </h2>
+          </div>
+
+          <div className="flex flex-col gap-y-5 px-5">
             {/* Brand 선택 */}
-            <div className="ml-5 flex items-center gap-x-10 w-75 text-[#CBD5E1]">
-              <span>Brand</span>
+            <div className="flex flex-col gap-y-2">
+              <label className="flex items-baseline gap-1.5 pl-1">
+                <span className="text-sm font-medium text-[#CBD5E1]">
+                  Brand
+                </span>
+              </label>
               <button
-                className="flex items-center gap-2 border-b border-[#CBD5E1] min-w-30 w-fit justify-center"
+                className="flex items-center justify-between w-full bg-[#1B242C] px-4 py-3 rounded-xl border border-[#374151] hover:border-[#1E7F4F] transition-colors focus:outline-none"
                 onClick={() => handleShoeChangeRequest("brand")}
               >
-                <span className="whitespace-nowrap pl-2">
-                  {value.brand || "Select"}
+                <span
+                  className={`text-sm ${value.brand ? "text-white" : "text-[#6B7280]"}`}
+                >
+                  {value.brand || "브랜드를 선택해주세요"}
                 </span>
-                <ChevronDown className="text-[#CBD5E1] shrink-0" />
+                <ChevronDown className="text-[#94A3B8] w-4 h-4 shrink-0" />
               </button>
             </div>
-
             {/* Model 선택 */}
-            <div className="ml-5 flex items-center gap-x-10 w-75 text-[#CBD5E1]">
-              <span>Model</span>
+            <div className="flex flex-col gap-y-2">
+              <label className="flex items-baseline gap-1.5 pl-1">
+                <span className="text-sm font-medium text-[#CBD5E1]">
+                  Model
+                </span>
+              </label>
               <button
                 disabled={!value.brand}
-                className="flex items-center gap-2 border-b border-[#CBD5E1] min-w-30 w-fit justify-center disabled:text-[#cbd5e149]"
+                className="flex items-center justify-between w-full bg-[#1B242C] px-4 py-3 rounded-xl border border-[#374151] hover:border-[#1E7F4F] transition-colors focus:outline-none disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-[#374151]"
                 onClick={() => handleShoeChangeRequest("model")}
               >
-                <span className="whitespace-nowrap pl-2">
-                  {value.model || "Select"}
+                <span
+                  className={`text-sm ${value.model ? "text-white" : "text-[#6B7280]"}`}
+                >
+                  {value.model || "모델을 선택해주세요"}
                 </span>
-                <ChevronDown className="text-[#CBD5E1] shrink-0" />
+                <ChevronDown className="text-[#94A3B8] w-4 h-4 shrink-0" />
               </button>
             </div>
           </div>
         </div>
 
         {/* Running status */}
-        <div className="text-[#CBD5E1] bg-[#242E35] w-75 h-31.5 mx-auto pt-3 rounded-2xl font-light">
-          <div className="flex gap-x-5">
-            <h2 className="text-xl ml-5 pb-3">Running Status</h2>
-            {/* toggle 구현 */}
-            <div
+        <div className="text-[#CBD5E1] bg-[#242E35] shadow-lg w-75 mx-auto pt-5 pb-5 rounded-2xl font-light transition-all duration-300">
+          <div className="flex items-center justify-between px-5 mb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-5 bg-[#1E7F4F] rounded-full"></div>
+              <h2 className="text-white text-lg font-semibold tracking-wide">
+                Running Status
+              </h2>
+            </div>
+
+            <button
+              onClick={() => setIsRunning(!isRunning)}
               className={`
-                w-14 h-7 flex items-center rounded-full p-2 cursor-pointer
-                transition-colors
+                relative w-14 h-7 rounded-full transition-colors duration-300 ease-in-out focus:outline-none
                 ${isRunning ? "bg-[#1E7F4F]" : "bg-[#6B7280]"}
-                `}
+              `}
+              aria-label="Toggle Running Status"
             >
               <div
                 className={`
-                w-6 h-6 bg-white rounded-full shadow
-                transition-transform
-                ${isRunning ? "translate-x-6" : "-translate-x-2"}
+                  absolute top-1 left-1 w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-300 ease-in-out
+                  ${isRunning ? "translate-x-7" : "translate-x-0"}
                 `}
               />
-            </div>
+            </button>
           </div>
-          <div className="flex gap-x-3 pl-5 pt-3">
-            <div className="w-22.5 h-6 bg-[#1E7F4F] rounded-2xl text-sm flex justify-center hover:bg-[#1e7f4ec9]">
-              <button onClick={() => setIsRunning(true)}>Running</button>
-            </div>
-            <div className="w-22.5 h-6 bg-[#6B7280] rounded-2xl text-sm flex justify-center hover:bg-[#6b7280b8]">
-              <button onClick={() => setIsRunning(false)}>Breaking</button>
+
+          {/* Running / Breaking 선택 버튼 */}
+          <div className="flex gap-x-3 px-5">
+            <button
+              onClick={() => setIsRunning(true)}
+              className={`flex-1 h-8 rounded-xl text-sm font-medium transition-colors duration-200 ${
+                isRunning
+                  ? "bg-[#1E7F4F] text-white"
+                  : "bg-[#374151] text-[#9CA3AF] hover:bg-[#4B5563]"
+              }`}
+            >
+              Running
+            </button>
+            <button
+              onClick={() => setIsRunning(false)}
+              className={`flex-1 h-8 rounded-xl text-sm font-medium transition-colors duration-200 ${
+                !isRunning
+                  ? "bg-[#6B7280] text-white"
+                  : "bg-[#374151] text-[#9CA3AF] hover:bg-[#4B5563]"
+              }`}
+            >
+              Breaking
+            </button>
+          </div>
+
+          <div
+            className={`
+            overflow-hidden transition-all duration-300 ease-in-out
+            ${!isRunning ? "max-h-20 opacity-100 mt-4" : "max-h-0 opacity-0 mt-0"}
+          `}
+          >
+            <div className="mx-5 p-3 bg-black/20 rounded-xl border border-gray-600/50 flex gap-2 items-start">
+              <span className="text-amber-400/90 text-sm mt-0.5">⏸️</span>
+              <p className="text-xs text-gray-400 leading-relaxed">
+                현재 휴식기입니다. <br />
+                <span className="text-amber-100 font-medium">
+                  러닝화 수명 차감이 일시 정지
+                </span>
+                됩니다.
+              </p>
             </div>
           </div>
         </div>
