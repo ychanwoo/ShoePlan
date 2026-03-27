@@ -105,19 +105,45 @@ export default function HomeClient() {
           </p>
         </div>
 
-        <div className="text-[#CBD5E1] text-center space-y-3 font-light relative top-55">
-          <p>
-            총 권장 수명: <span>{shoeLife.recommendedLife}km</span>
-          </p>
-          {shoeLife.usagePercent >= 100 ? (
-            <p>
-              총 달린 거리: <span>{shoeLife.usedDistance}km</span>
-            </p>
-          ) : (
-            <p>
-              남은 주행 거리: <span>{remainmingKm}km</span>
-            </p>
-          )}
+        <div className="relative top-55 px-5 w-full max-w-95 mx-auto">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-[#242E39] rounded-4xl p-5 shadow-lg relative overflow-hidden">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-1.5 h-1.5 rounded-full bg-gray-500"></div>
+                <span className="text-[#94A3B8] text-sm font-medium tracking-wide">
+                  총 권장 수명
+                </span>
+              </div>
+              <div className="flex items-end gap-1">
+                <span className="text-white text-4xl font-black tracking-tighter leading-none">
+                  {shoeLife.recommendedLife}
+                </span>
+                <span className="text-gray-500 text-sm font-bold mb-0.5">
+                  km
+                </span>
+              </div>
+            </div>
+
+            <div className="bg-[#242E39] rounded-4xl p-5 shadow-lg relative overflow-hidden">
+              <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full opacity-20 blur-2xl bg-[#1E7F4F]"></div>
+
+              <div className="flex items-center gap-2 mb-4 relative z-10">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#1E7F4F]"></div>
+                <span className="text-sm font-medium tracking-wide text-emerald-100">
+                  남은 주행 거리
+                </span>
+              </div>
+
+              <div className="flex items-end gap-1 relative z-10">
+                <span className="text-4xl font-black tracking-tighter leading-none text-[#1E7F4F]">
+                  {remainmingKm}
+                </span>
+                <span className="text-sm font-bold mb-0.5 text-[#1E7F4F]">
+                  km
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

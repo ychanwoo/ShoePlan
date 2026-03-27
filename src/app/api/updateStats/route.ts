@@ -33,9 +33,7 @@ export async function GET() {
 
     const { data, error } = await supabase
       .from("user_profile")
-      .select(
-        "running_distance, running_type, shoe_brand, shoe_model, is_running, running_distance, shoe_pros, shoe_cons",
-      )
+      .select("*")
       .eq("oauth_id", oauthId)
       .maybeSingle();
 
