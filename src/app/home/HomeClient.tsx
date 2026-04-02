@@ -88,13 +88,12 @@ export default function HomeClient() {
     <>
       <HeaderBar title="Home" showInfo />
 
-      <div className="h-[calc(100vh-11vh)] overflow-y-auto pb-100">
+      <div className="h-[calc(100vh-11vh)] overflow-y-auto pb-80">
         <div className="flex flex-col items-center relative top-25">
           <ShoeLifeProgress percentage={shoeLife?.usagePercent} />
         </div>
 
         <div className="text-[#CBD5E1] text-center relative top-40">
-          {/* percentage에 따라 문구 조정 */}
           <p className="font-light">{message}</p>
           <p className="text-2xl">
             교체 권장 까지{" "}
@@ -106,36 +105,39 @@ export default function HomeClient() {
         </div>
 
         <div className="relative top-55 px-5 w-full max-w-95 mx-auto">
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-[#242E39] rounded-4xl p-5 shadow-lg relative overflow-hidden">
-              <div className="flex items-center gap-2 mb-4">
+          <div className="flex flex-col gap-3">
+            {/* 총 권장 수명 */}
+            <div className="flex items-center justify-between rounded-2xl bg-[#242E39] px-5 h-20 shadow-md">
+              <div className="flex items-center gap-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-gray-500"></div>
                 <span className="text-[#94A3B8] text-sm font-medium tracking-wide">
                   총 권장 수명
                 </span>
               </div>
+
               <div className="flex items-end gap-1">
-                <span className="text-white text-4xl font-black tracking-tighter leading-none">
+                <span className="text-white text-2xl font-bold tracking-tight">
                   {shoeLife.recommendedLife}
                 </span>
-                <span className="text-gray-500 text-sm font-bold mb-0.5">
+                <span className="text-[#94A3B8] text-sm font-bold mb-0.5">
                   km
                 </span>
               </div>
             </div>
 
-            <div className="bg-[#242E39] rounded-4xl p-5 shadow-lg relative overflow-hidden">
-              <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full opacity-20 blur-2xl bg-[#1E7F4F]"></div>
+            {/* 남은 주행 거리 */}
+            <div className="flex items-center justify-between rounded-2xl bg-[#242E39] px-5 h-20 shadow-md relative overflow-hidden">
+              <div className="absolute right-0 top-0 w-24 h-full bg-[#1E7F4F]/10 blur-xl" />
 
-              <div className="flex items-center gap-2 mb-4 relative z-10">
+              <div className="flex items-center gap-2 z-10">
                 <div className="w-1.5 h-1.5 rounded-full bg-[#1E7F4F]"></div>
                 <span className="text-sm font-medium tracking-wide text-emerald-100">
                   남은 주행 거리
                 </span>
               </div>
 
-              <div className="flex items-end gap-1 relative z-10">
-                <span className="text-4xl font-black tracking-tighter leading-none text-[#1E7F4F]">
+              <div className="flex items-end gap-1 z-10">
+                <span className="text-2xl font-bold tracking-tight text-[#1E7F4F]">
                   {remainmingKm}
                 </span>
                 <span className="text-sm font-bold mb-0.5 text-[#1E7F4F]">

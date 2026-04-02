@@ -2,21 +2,21 @@
 import HeaderBar from "@/components/common/HeaderBar";
 import TabBar from "@/components/common/TabBar";
 import { ChartColumn, TrendingUpDown } from "lucide-react";
-import MainBtn from "@/components/button/MainBtn";
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/pagination";
 import "@/styles/globals.css";
+import { useRouter } from "next/navigation";
 
 export default function ShoePage() {
+  const router = useRouter();
   return (
     <>
       <HeaderBar title="Shoe" />
 
-      <div className="pb-27 h-[calc(100vh-11vh)] overflow-y-auto pt-5">
+      <div className="pb-23 h-[calc(100vh-11vh)] overflow-y-auto pt-3">
         {/* Current Running Trends */}
         <div className="flex gap-x-1 text-[#CBD5E1] text-xl mt-5 ml-5">
           <ChartColumn />
@@ -143,25 +143,104 @@ export default function ShoePage() {
         </div>
 
         {/* Trend Insight */}
-        <div className="text-[#CBD5E1] bg-[#242E35] w-82.5 h-54 mx-auto rounded-2xl gap-x-2 mt-5">
+        <div className="text-[#CBD5E1] bg-[#242E35] w-92.5 h-40 mx-auto rounded-2xl gap-x-2 mt-5">
           <div className="ml-4 pt-5 flex gap-x-2">
             <TrendingUpDown />
             <h2 className="text-xl">Trend Insight</h2>
           </div>
-          <p className="text-center mt-10 font-light">
-            20대 러너는 반발력이 강한 레이싱화 선호 <br />
-            40대 이상은 쿠셔닝 & 안정성 중심 선택
-          </p>
+          <div className="mt-3 flex flex-col gap-2 px-4 text-sm">
+            <div className="flex justify-between items-center">
+              <span className="text-white/70">20대 러너</span>
+              <span className="font-semibold text-green-400">
+                데일리화 · 레이싱화
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span className="text-white/70">30대 러너</span>
+              <span className="font-semibold text-yellow-300">
+                쿠셔닝 · 데일리화
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span className="text-white/70">40대 이상</span>
+              <span className="font-semibold text-blue-300">
+                균형형 · 안정성
+              </span>
+            </div>
+          </div>
         </div>
 
-        {/* button 및 text */}
-        <div className="right-34">
-          <p className="text-[#CBD5E1] text-sm text-center mb-2 mt-10">
-            실제 트렌드를 통해 추천 받아보세요
+        <div className="mt-8 px-4">
+          <p className="mb-4 text-center text-[15px] font-semibold text-white/90 tracking-tight">
+            내 러닝화 상태를 확인해보세요
           </p>
-          <MainBtn href="/shoe/recommend" className="mx-auto">
-            나에게 맞는 러닝화 추천 받기
-          </MainBtn>
+
+          {/* button 영역 */}
+          <div className="grid grid-cols-2 gap-3">
+            {/* Outsole analyze button */}
+            <button
+              onClick={() => router.push("/shoe/outsole")}
+              className="group relative overflow-hidden rounded-[24px] bg-linear-to-br from-[#1E7F4F] to-[#16643D] p-4 text-left text-white shadow-[0_10px_30px_rgba(0,0,0,0.18)] transition hover:from-[#1a7247] hover:to-[#135836] active:scale-[0.98]"
+            >
+              <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/10 blur-2xl transition group-hover:scale-110" />
+              <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-white/70 transition-all duration-300 group-hover:w-full" />
+
+              <div className="relative flex h-32 flex-col justify-between">
+                <div>
+                  <span className="inline-flex rounded-full bg-white/12 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/80">
+                    Analysis
+                  </span>
+
+                  <p className="mt-3 text-[16px] font-bold leading-tight tracking-[-0.02em]">
+                    아웃솔 분석
+                  </p>
+                  <p className="mt-1 text-[12px] leading-relaxed text-white/75">
+                    마모 패턴 확인
+                  </p>
+                </div>
+
+                <div className="flex items-end justify-between">
+                  <span className="text-[11px] text-white/55">Wear Check</span>
+                  <span className="text-sm font-medium text-white/90 transition group-hover:translate-x-1">
+                    →
+                  </span>
+                </div>
+              </div>
+            </button>
+
+            {/* recommend button */}
+            <button
+              onClick={() => router.push("/shoe/recommend")}
+              className="group relative overflow-hidden rounded-[24px] border border-white/8 bg-[#27323A] p-4 text-left text-white shadow-[0_10px_30px_rgba(0,0,0,0.14)] transition hover:border-white/15 hover:bg-[#2d3942] active:scale-[0.98]"
+            >
+              <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/8 blur-2xl transition group-hover:scale-110" />
+              <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-white/50 transition-all duration-300 group-hover:w-full" />
+
+              <div className="relative flex h-32 flex-col justify-between">
+                <div>
+                  <span className="inline-flex rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/70">
+                    Recommend
+                  </span>
+
+                  <p className="mt-3 text-[16px] font-bold leading-tight tracking-[-0.02em]">
+                    러닝화 추천
+                  </p>
+                  <p className="mt-1 text-[12px] leading-relaxed text-white/75">
+                    트렌드 기반 추천
+                  </p>
+                </div>
+
+                <div className="flex items-end justify-between">
+                  <span className="text-[11px] text-white/55">Trend Pick</span>
+                  <span className="text-sm font-medium text-white/90 transition group-hover:translate-x-1">
+                    →
+                  </span>
+                </div>
+              </div>
+            </button>
+          </div>
         </div>
       </div>
 
