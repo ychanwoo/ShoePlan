@@ -8,6 +8,7 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { shoeType } from "@/types/shoeType";
 import { getSurveyData, setSurveyData, SurveyData } from "@/lib/surveyStorage";
+import RecommendStepModal from "../common/RecommendStepModal";
 
 const brands = ["Nike", "Adidas", "Asics", "New Balance"];
 
@@ -60,6 +61,25 @@ export default function StepFourPage({ onNext, onPrev }: StepNavigationProps) {
     brand: saved.shoeBrand || "",
     model: saved.shoeModel || "",
   });
+  const [modalConfig, setModalConfig] = useState({
+    isOpen: false,
+    message: "",
+  });
+
+  const handleNext = () => {
+    if (!value.brand || !value.model) {
+      setModalConfig({
+        isOpen: true,
+        message: "러닝화를 선택해 주세요 ⚠️",
+      });
+      return;
+    }
+    onNext();
+  };
+
+  const closeModal = () => {
+    setModalConfig({ isOpen: false, message: "" });
+  };
 
   const handleSelect = (key: "brand" | "model", item: string) => {
     setValue((prev) => ({
@@ -76,6 +96,7 @@ export default function StepFourPage({ onNext, onPrev }: StepNavigationProps) {
     }
     setOpen(null);
   };
+
   return (
     <>
       {/* 상단 로고 이미지 */}
@@ -132,8 +153,14 @@ export default function StepFourPage({ onNext, onPrev }: StepNavigationProps) {
       {/* 버튼 영역 - 화면 하단에 좌우 배치 */}
       <div className="absolute bottom-13 left-0 right-0 flex justify-between px-8">
         <PrevBtn onClick={onPrev}>← Prev</PrevBtn>
-        <NextBtn onClick={onNext}>Next →</NextBtn>
+        <NextBtn onClick={handleNext}>Next →</NextBtn>
       </div>
+
+      <RecommendStepModal
+        isOpen={modalConfig.isOpen}
+        message={modalConfig.message}
+        onClose={closeModal}
+      />
 
       {/* Brand Modal */}
       {open && (

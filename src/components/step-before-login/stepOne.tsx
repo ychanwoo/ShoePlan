@@ -7,6 +7,7 @@ import Picker from "react-mobile-picker";
 import { StepNavigationProps } from "@/types/StepNavigationProps";
 import NextBtn from "../button/NextBtn";
 import { getSurveyData, setSurveyData } from "@/lib/surveyStorage";
+import RecommendStepModal from "../common/RecommendStepModal";
 
 const heights = Array.from({ length: 101 }, (_, i) => i + 130); // 130~230
 const weights = Array.from({ length: 101 }, (_, i) => i + 40); // 40~140
@@ -20,6 +21,25 @@ export default function StepOnePage({ onNext }: StepNavigationProps) {
   });
 
   const [open, setOpen] = useState<"height" | "weight" | null>(null);
+  const [modalConfig, setModalConfig] = useState({
+    isOpen: false,
+    message: "",
+  });
+
+  const handleNext = () => {
+    if (!value.height || !value.weight) {
+      setModalConfig({
+        isOpen: true,
+        message: "신체정보를 입력해 주세요 ⚠️",
+      });
+      return;
+    }
+    onNext();
+  };
+
+  const closeModal = () => {
+    setModalConfig({ isOpen: false, message: "" });
+  };
 
   //* 값 바뀔때마다 sessionStorage에 저장
   const handleChange = (key: "height" | "weight", val: number) => {
@@ -96,8 +116,14 @@ export default function StepOnePage({ onNext }: StepNavigationProps) {
 
       {/* Next 버튼 */}
       <div className="absolute bottom-13 left-0 right-0 flex justify-end px-8">
-        <NextBtn onClick={onNext}>Next →</NextBtn>
+        <NextBtn onClick={handleNext}>Next →</NextBtn>
       </div>
+
+      <RecommendStepModal
+        isOpen={modalConfig.isOpen}
+        message={modalConfig.message}
+        onClose={closeModal}
+      />
 
       {/* Bottom Sheet + Picker */}
       {open && (

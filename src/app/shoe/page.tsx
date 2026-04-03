@@ -16,7 +16,7 @@ export default function ShoePage() {
     <>
       <HeaderBar title="Shoe" />
 
-      <div className="pb-23 h-[calc(100vh-11vh)] overflow-y-auto pt-3">
+      <div className="pb-28 h-[calc(100vh-11vh)] overflow-y-auto pt-3">
         {/* Current Running Trends */}
         <div className="flex gap-x-1 text-[#CBD5E1] text-xl mt-5 ml-5">
           <ChartColumn />
@@ -202,7 +202,9 @@ export default function ShoePage() {
                 </div>
 
                 <div className="flex items-end justify-between">
-                  <span className="text-[11px] text-white/55">Wear Check</span>
+                  <span className="text-[11px] text-white/55">
+                    Outsole Check
+                  </span>
                   <span className="text-sm font-medium text-white/90 transition group-hover:translate-x-1">
                     →
                   </span>

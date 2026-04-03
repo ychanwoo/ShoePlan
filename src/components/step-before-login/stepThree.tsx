@@ -6,6 +6,7 @@ import PrevBtn from "../button/PrevBtn";
 import NextBtn from "../button/NextBtn";
 import { useState } from "react";
 import { getSurveyData, setSurveyData } from "@/lib/surveyStorage";
+import RecommendStepModal from "../common/RecommendStepModal";
 
 const options = [
   "LSD(Long Slow Distance",
@@ -19,6 +20,25 @@ export default function StepThreePage({ onNext, onPrev }: StepNavigationProps) {
   const [selected, setSelected] = useState<string | null>(
     saved.runningType || null,
   );
+  const [modalConfig, setModalConfig] = useState({
+    isOpen: false,
+    message: "",
+  });
+
+  const handleNext = () => {
+    if (!selected) {
+      setModalConfig({
+        isOpen: true,
+        message: "러닝 유형을 선택해 주세요 ⚠️",
+      });
+      return;
+    }
+    onNext();
+  };
+
+  const closeModal = () => {
+    setModalConfig({ isOpen: false, message: "" });
+  };
 
   const handleSelect = (option: string) => {
     setSelected(option);
@@ -74,8 +94,14 @@ export default function StepThreePage({ onNext, onPrev }: StepNavigationProps) {
       {/* 버튼 영역 - 화면 하단에 좌우 배치 */}
       <div className="absolute bottom-13 left-0 right-0 flex justify-between px-8">
         <PrevBtn onClick={onPrev}>← Prev</PrevBtn>
-        <NextBtn onClick={onNext}>Next →</NextBtn>
+        <NextBtn onClick={handleNext}>Next →</NextBtn>
       </div>
+
+      <RecommendStepModal
+        isOpen={modalConfig.isOpen}
+        message={modalConfig.message}
+        onClose={closeModal}
+      />
     </>
   );
 }

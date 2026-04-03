@@ -5,8 +5,9 @@ import { StepNavigationProps } from "@/types/StepNavigationProps";
 import NextBtn from "../button/NextBtn";
 import { useState } from "react";
 import PrevBtn from "../button/PrevBtn";
-import Link from "next/link";
 import { getSurveyData, setSurveyData } from "@/lib/surveyStorage";
+import RecommendStepModal from "../common/RecommendStepModal";
+import { useRouter } from "next/navigation";
 
 const options = [
   "1개월",
@@ -20,10 +21,32 @@ const options = [
 
 export default function StepFivePage({ onNext, onPrev }: StepNavigationProps) {
   const saved = getSurveyData();
+  const router = useRouter();
   const initialSelected = options.includes(saved.shoeAge || "")
     ? saved.shoeAge!
     : null;
   const [selected, setSelected] = useState<string | null>(initialSelected);
+
+  const [modalConfig, setModalConfig] = useState({
+    isOpen: false,
+    message: "",
+  });
+
+  const handleNext = () => {
+    if (!selected) {
+      setModalConfig({
+        isOpen: true,
+        message: "사용기간을 선택해 주세요 ⚠️",
+      });
+      return;
+    }
+    onNext();
+    router.push("/steps/preview");
+  };
+
+  const closeModal = () => {
+    setModalConfig({ isOpen: false, message: "" });
+  };
 
   const handleSelect = (option: string) => {
     setSelected(option);
@@ -79,10 +102,14 @@ export default function StepFivePage({ onNext, onPrev }: StepNavigationProps) {
       {/* 버튼 영역 - 화면 하단에 좌우 배치 */}
       <div className="absolute bottom-13 left-0 right-0 flex justify-between px-8">
         <PrevBtn onClick={onPrev}>← Prev</PrevBtn>
-        <Link href="/steps/preview" className="text-sm">
-          <NextBtn onClick={onNext}>결과보기</NextBtn>
-        </Link>
+        <NextBtn onClick={handleNext}>결과보기</NextBtn>
       </div>
+
+      <RecommendStepModal
+        isOpen={modalConfig.isOpen}
+        message={modalConfig.message}
+        onClose={closeModal}
+      />
     </>
   );
 }
