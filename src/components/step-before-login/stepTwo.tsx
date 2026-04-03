@@ -7,6 +7,7 @@ import NextBtn from "../button/NextBtn";
 import PrevBtn from "../button/PrevBtn";
 import { useState } from "react";
 import { getSurveyData, setSurveyData } from "@/lib/surveyStorage";
+import RecommendStepModal from "../common/RecommendStepModal";
 
 const options = [
   "50km 미만",
@@ -30,6 +31,26 @@ export default function StepTwoPage({ onNext, onPrev }: StepNavigationProps) {
       ? saved.runningDistanceCustom
       : "",
   );
+
+  const [modalConfig, setModalConfig] = useState({
+    isOpen: false,
+    message: "",
+  });
+
+  const handleNext = () => {
+    if (!selected || (selected === "직접입력" && !customKm)) {
+      setModalConfig({
+        isOpen: true,
+        message: "거리를 선택해 주세요 ⚠️",
+      });
+      return;
+    }
+    onNext();
+  };
+
+  const closeModal = () => {
+    setModalConfig({ isOpen: false, message: "" });
+  };
 
   // 선택 시 sessionStorage에 저장
   const handleSelect = (option: string) => {
@@ -123,8 +144,14 @@ export default function StepTwoPage({ onNext, onPrev }: StepNavigationProps) {
 
       <div className="absolute bottom-13 left-0 right-0 flex justify-between px-8">
         <PrevBtn onClick={onPrev}>← Prev</PrevBtn>
-        <NextBtn onClick={onNext}>Next →</NextBtn>
+        <NextBtn onClick={handleNext}>Next →</NextBtn>
       </div>
+
+      <RecommendStepModal
+        isOpen={modalConfig.isOpen}
+        message={modalConfig.message}
+        onClose={closeModal}
+      />
     </>
   );
 }
