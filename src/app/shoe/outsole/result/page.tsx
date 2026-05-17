@@ -77,7 +77,7 @@ export default function OutsoleResultPage() {
       content: {
         title: "👟 ShoePlan: 아웃솔 분석 결과",
         description: `마모 위치는 '${WEAR_SIDE_LABEL[result.dominantWearSide]}', 마모 강도는 '${WEAR_SEVERITY_LABEL[result.wearSeverity]}' 입니다.`,
-        imageUrl: "https://i.imgur.com/i3NPkiP.jpeg",
+        imageUrl: "https://imgur.com/a/vvorfF2 ",
         link: {
           mobileWebUrl: shareUrl,
           webUrl: shareUrl,

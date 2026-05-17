@@ -10,7 +10,17 @@ import { shoeType } from "@/types/shoeType";
 import { getSurveyData, setSurveyData, SurveyData } from "@/lib/surveyStorage";
 import RecommendStepModal from "../common/RecommendStepModal";
 
-const brands = ["Nike", "Adidas", "Asics", "New Balance"];
+const brands = [
+  "Nike",
+  "Adidas",
+  "Puma",
+  "New Balance",
+  "Asics",
+  "Mizuno",
+  "Hoka",
+  "Saucony",
+  "On",
+];
 
 //* 브랜드에 따른 모델 리스트
 const models: Record<string, string[]> = {
