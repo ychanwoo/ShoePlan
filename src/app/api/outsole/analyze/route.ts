@@ -1,13 +1,25 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { OutsoleAnalysisResult } from "@/lib/outsoleAnalysis";
+import {
+  FootAnalysisResult,
+  OutsoleAnalysisResult,
+  OutsoleClass,
+} from "@/lib/outsoleAnalysis";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
 const BUCKET_NAME = "outsole-images";
 const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
+const MODEL_API_URL = process.env.OUTSOLE_MODEL_API_URL;
+const OUTSOLE_CLASSES = new Set<OutsoleClass>([
+  "inside",
+  "insufficient",
+  "neutral",
+  "outside",
+  "unknown",
+]);
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -26,6 +38,61 @@ function getExtension(fileName: string, contentType: string) {
   if (contentType.includes("webp")) return "webp";
 
   return "jpg";
+}
+
+async function analyzeWithModelServer(
+  imageBuffer: Buffer,
+  image: File,
+): Promise<FootAnalysisResult> {
+  if (!MODEL_API_URL) {
+    const { analyzeOutsoleImage } = await import("@/lib/outsoleModel");
+    return analyzeOutsoleImage(imageBuffer);
+  }
+
+  const formData = new FormData();
+  const arrayBuffer = imageBuffer.buffer.slice(
+    imageBuffer.byteOffset,
+    imageBuffer.byteOffset + imageBuffer.byteLength,
+  ) as ArrayBuffer;
+  formData.append(
+    "image",
+    new Blob([arrayBuffer], { type: image.type || "image/jpeg" }),
+    image.name || "outsole.jpg",
+  );
+
+  const response = await fetch(`${MODEL_API_URL.replace(/\/$/, "")}/predict`, {
+    body: formData,
+    method: "POST",
+    signal: AbortSignal.timeout(55000),
+  });
+  const text = await response.text();
+  const data = text ? JSON.parse(text) : {};
+
+  if (!response.ok) {
+    throw new Error(
+      data.detail ??
+        data.error ??
+        `Outsole model server failed with status ${response.status}`,
+    );
+  }
+
+  if (
+    !data ||
+    typeof data.className !== "string" ||
+    !("confidence" in data)
+  ) {
+    throw new Error("Outsole model server returned an invalid response.");
+  }
+
+  const className = OUTSOLE_CLASSES.has(data.className)
+    ? data.className
+    : "unknown";
+
+  return {
+    className,
+    confidence:
+      typeof data.confidence === "number" ? data.confidence : null,
+  };
 }
 
 export async function POST(req: Request) {
@@ -60,10 +127,9 @@ export async function POST(req: Request) {
 
     const leftImageBuffer = Buffer.from(await leftImage.arrayBuffer());
     const rightImageBuffer = Buffer.from(await rightImage.arrayBuffer());
-    const { analyzeOutsoleImage } = await import("@/lib/outsoleModel");
     const [left, right] = await Promise.all([
-      analyzeOutsoleImage(leftImageBuffer),
-      analyzeOutsoleImage(rightImageBuffer),
+      analyzeWithModelServer(leftImageBuffer, leftImage),
+      analyzeWithModelServer(rightImageBuffer, rightImage),
     ]);
     const updatedAt = new Date().toISOString();
     const safeOauthId = sanitizePathPart(oauthId);
