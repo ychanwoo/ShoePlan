@@ -39,6 +39,8 @@ interface UploadState {
 
 const LATEST_RESULT_KEY = "shoeplan:outsole-latest-result";
 const MIN_LOADING_MS = 3000;
+const MAX_ANALYZE_IMAGE_EDGE = 1400;
+const TARGET_ANALYZE_IMAGE_BYTES = 1.4 * 1024 * 1024;
 
 function delay(ms: number) {
   return new Promise((resolve) => window.setTimeout(resolve, ms));
@@ -55,6 +57,97 @@ function emptyUpload(): UploadState {
 function revokePreview(upload: UploadState) {
   if (upload.previewUrl?.startsWith("blob:")) {
     URL.revokeObjectURL(upload.previewUrl);
+  }
+}
+
+function loadImage(file: File) {
+  return new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image();
+    const objectUrl = URL.createObjectURL(file);
+
+    image.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve(image);
+    };
+    image.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error("이미지를 불러오지 못했습니다."));
+    };
+    image.src = objectUrl;
+  });
+}
+
+function canvasToBlob(
+  canvas: HTMLCanvasElement,
+  quality: number,
+): Promise<Blob> {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) {
+          reject(new Error("이미지 압축에 실패했습니다."));
+          return;
+        }
+        resolve(blob);
+      },
+      "image/jpeg",
+      quality,
+    );
+  });
+}
+
+async function compressImageForAnalyze(file: File) {
+  if (
+    file.type === "image/jpeg" &&
+    file.size <= TARGET_ANALYZE_IMAGE_BYTES
+  ) {
+    return file;
+  }
+
+  const image = await loadImage(file);
+  const ratio = Math.min(
+    1,
+    MAX_ANALYZE_IMAGE_EDGE / Math.max(image.naturalWidth, image.naturalHeight),
+  );
+  const width = Math.max(1, Math.round(image.naturalWidth * ratio));
+  const height = Math.max(1, Math.round(image.naturalHeight * ratio));
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+
+  if (!context) throw new Error("이미지를 처리하지 못했습니다.");
+
+  canvas.width = width;
+  canvas.height = height;
+  context.drawImage(image, 0, 0, width, height);
+
+  const qualities = [0.82, 0.74, 0.66, 0.58];
+  let bestBlob = await canvasToBlob(canvas, qualities[0]);
+
+  for (const quality of qualities.slice(1)) {
+    if (bestBlob.size <= TARGET_ANALYZE_IMAGE_BYTES) break;
+    bestBlob = await canvasToBlob(canvas, quality);
+  }
+
+  const safeName = file.name.replace(/\.[^.]+$/, "") || "outsole";
+
+  return new File([bestBlob], `${safeName}.jpg`, {
+    lastModified: Date.now(),
+    type: "image/jpeg",
+  });
+}
+
+async function readJsonResponse(response: Response): Promise<AnalyzeResponse> {
+  const text = await response.text();
+
+  try {
+    return text ? (JSON.parse(text) as AnalyzeResponse) : {};
+  } catch {
+    return {
+      error:
+        response.status === 413
+          ? "이미지 용량이 너무 큽니다. 사진을 조금 작게 줄여 다시 시도해주세요."
+          : "분석을 완료하지 못했습니다. 잠시 후 다시 시도해주세요.",
+    };
   }
 }
 
@@ -104,14 +197,14 @@ export default function OutsolePage() {
     };
   }, []);
 
-  const updateUpload = (side: FootSide, file: File) => {
+  const updateUpload = (side: FootSide, file: File, fileName = file.name) => {
     const setter = side === "left" ? setLeftUpload : setRightUpload;
 
     setter((prev) => {
       revokePreview(prev);
       return {
         file,
-        fileName: file.name,
+        fileName,
         previewUrl: URL.createObjectURL(file),
       };
     });
@@ -122,8 +215,16 @@ export default function OutsolePage() {
       const file = event.target.files?.[0];
       if (!file) return;
 
-      updateUpload(side, file);
-      setMessage("");
+      setMessage("분석용 이미지로 최적화하는 중입니다...");
+      compressImageForAnalyze(file)
+        .then((compressedFile) => {
+          updateUpload(side, compressedFile, file.name);
+          setMessage("");
+        })
+        .catch((error) => {
+          console.error("Outsole image compression error:", error);
+          setMessage("이미지를 처리하지 못했습니다. 다른 사진으로 시도해주세요.");
+        });
       event.target.value = "";
     };
 
@@ -164,7 +265,7 @@ export default function OutsolePage() {
         body: formData,
       });
 
-      const data = (await response.json()) as AnalyzeResponse;
+      const data = await readJsonResponse(response);
       await minimumLoading;
 
       if (!response.ok || !data.result) {
