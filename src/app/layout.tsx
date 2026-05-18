@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko">
+    <html lang="ko" suppressHydrationWarning>
       <body className="bg-[#343C47] min-h-dvh overflow-x-hidden relative">
         <div className="hidden md:block fixed inset-0 z-0 pointer-events-none">
           {/* Left */}
