@@ -2,35 +2,19 @@
 
 import HeaderBar from "@/components/common/HeaderBar";
 import TabBar from "@/components/common/TabBar";
+import {
+  FootAnalysisResult,
+  OUTSOLE_CLASS_LABEL,
+  OUTSOLE_RESULT_COPY,
+  OutsoleAnalysisResult,
+} from "@/lib/outsoleAnalysis";
 import { KakaoShareParams } from "@/types/kakaoShareParams";
-import { AlertTriangle, Share, Sparkles } from "lucide-react";
+import { AlertTriangle, House, Share, Sparkles } from "lucide-react";
 import Link from "next/link";
 import Script from "next/script";
 import { useEffect, useState } from "react";
 
-interface OutsoleAnalysis {
-  id: string;
-  dominantWearSide: "inside" | "outside" | "balanced";
-  wearSeverity: "low" | "medium" | "high";
-  summary: string;
-  recommendation: string;
-  imageUrl: string | null;
-}
-
-const HISTORY_KEY = "shoeplan:outsole-history";
 const LATEST_RESULT_KEY = "shoeplan:outsole-latest-result";
-
-const WEAR_SIDE_LABEL: Record<OutsoleAnalysis["dominantWearSide"], string> = {
-  balanced: "균형",
-  inside: "안쪽",
-  outside: "바깥쪽",
-};
-
-const WEAR_SEVERITY_LABEL: Record<OutsoleAnalysis["wearSeverity"], string> = {
-  high: "높음",
-  low: "낮음",
-  medium: "보통",
-};
 
 declare global {
   interface Window {
@@ -44,21 +28,69 @@ declare global {
   }
 }
 
+function formatConfidence(confidence: number | null) {
+  if (confidence === null) return "확인 필요";
+
+  return `${Math.round(confidence * 100)}%`;
+}
+
+function FootResultCard({
+  imageUrl,
+  result,
+  title,
+}: {
+  imageUrl: string | null;
+  result: FootAnalysisResult;
+  title: string;
+}) {
+  const copy = OUTSOLE_RESULT_COPY[result.className];
+
+  return (
+    <section className="rounded-2xl bg-[#242E35] p-4 shadow-lg">
+      {imageUrl ? (
+        <div className="mb-4 overflow-hidden rounded-2xl bg-[#1B242C]">
+          {/* Uploaded outsole image from Supabase Storage. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            alt={`${title} 아웃솔 이미지`}
+            className="h-52 w-full object-cover"
+            src={imageUrl}
+          />
+        </div>
+      ) : null}
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-xs text-[#94A3B8]">{title}</p>
+          <h2 className="mt-2 text-lg font-bold text-white">
+            {OUTSOLE_CLASS_LABEL[result.className]}
+          </h2>
+        </div>
+        <div className="rounded-2xl bg-[#1B242C] px-3 py-2 text-right">
+          <p className="text-[11px] text-[#94A3B8]">신뢰도</p>
+          <p className="mt-1 text-sm font-semibold text-[#1E7F4F]">
+            {formatConfidence(result.confidence)}
+          </p>
+        </div>
+      </div>
+      <p className="mt-5 text-sm leading-6 text-white">{copy.summary}</p>
+      <p className="mt-3 text-sm leading-6 text-[#CBD5E1]">
+        {copy.recommendation}
+      </p>
+    </section>
+  );
+}
+
 export default function OutsoleResultPage() {
-  const [result, setResult] = useState<OutsoleAnalysis | null>(null);
+  const [result, setResult] = useState<OutsoleAnalysisResult | null>(null);
   const [isKakaoLoaded, setIsKakaoLoaded] = useState(false);
 
   useEffect(() => {
-    const latest = window.sessionStorage.getItem(LATEST_RESULT_KEY);
-    if (latest) {
-      setResult(JSON.parse(latest) as OutsoleAnalysis);
-      return;
-    }
+    const latest =
+      window.sessionStorage.getItem(LATEST_RESULT_KEY) ??
+      window.localStorage.getItem(LATEST_RESULT_KEY);
 
-    const history = window.localStorage.getItem(HISTORY_KEY);
-    if (history) {
-      const parsed = JSON.parse(history) as OutsoleAnalysis[];
-      setResult(parsed[0] ?? null);
+    if (latest) {
+      setResult(JSON.parse(latest) as OutsoleAnalysisResult);
     }
   }, []);
 
@@ -75,9 +107,9 @@ export default function OutsoleResultPage() {
     window.Kakao.Share.sendDefault({
       objectType: "feed",
       content: {
-        title: "👟 ShoePlan: 아웃솔 분석 결과",
-        description: `마모 위치는 '${WEAR_SIDE_LABEL[result.dominantWearSide]}', 마모 강도는 '${WEAR_SEVERITY_LABEL[result.wearSeverity]}' 입니다.`,
-        imageUrl: "https://imgur.com/a/vvorfF2 ",
+        title: "ShoePlan: 아웃솔 분석 결과",
+        description: `왼쪽 신발은 '${OUTSOLE_CLASS_LABEL[result.left.className]}', 오른쪽 신발은 '${OUTSOLE_CLASS_LABEL[result.right.className]}' 입니다.`,
+        imageUrl: result.leftImageUrl ?? "https://imgur.com/a/vvorfF2",
         link: {
           mobileWebUrl: shareUrl,
           webUrl: shareUrl,
@@ -158,45 +190,20 @@ export default function OutsoleResultPage() {
             </h1>
           </section>
 
-          {result.imageUrl ? (
-            <section className="overflow-hidden rounded-2xl bg-[#242E35] p-4 shadow-lg">
-              {/* Data URL preview from the user's uploaded image. */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                alt="분석한 아웃솔 이미지"
-                className="h-58 w-full rounded-2xl object-cover"
-                src={result.imageUrl}
-              />
-            </section>
-          ) : null}
+          <FootResultCard
+            imageUrl={result.leftImageUrl}
+            result={result.left}
+            title="왼쪽 신발"
+          />
+          <FootResultCard
+            imageUrl={result.rightImageUrl}
+            result={result.right}
+            title="오른쪽 신발"
+          />
 
-          <section className="rounded-2xl bg-[#242E35] p-4 shadow-lg">
-            <h2 className="text-lg font-bold text-white">최근 분석 결과</h2>
-            <div className="mt-4 grid grid-cols-2 gap-3">
-              <div className="rounded-2xl bg-[#1B242C] p-4">
-                <p className="text-xs text-[#94A3B8]">마모 위치</p>
-                <p className="mt-2 text-lg font-semibold text-white">
-                  {WEAR_SIDE_LABEL[result.dominantWearSide]}
-                </p>
-              </div>
-              <div className="rounded-2xl bg-[#1B242C] p-4">
-                <p className="text-xs text-[#94A3B8]">마모 강도</p>
-                <p className="mt-2 text-lg font-semibold text-[#1E7F4F]">
-                  {WEAR_SEVERITY_LABEL[result.wearSeverity]}
-                </p>
-              </div>
-            </div>
-            <p className="mt-5 text-sm leading-6 text-white">
-              {result.summary}
-            </p>
-            <p className="mt-3 text-sm leading-6 text-white">
-              {result.recommendation}
-            </p>
-          </section>
-
-          <div className="flex justify-center gap-x-20 pt-2">
+          <div className="mx-auto flex w-full max-w-74 justify-between pt-2">
             <button
-              className="flex h-8.75 w-29 items-center justify-center rounded-2xl bg-[#6B7280] text-sm text-white hover:bg-[#6b7280cc]"
+              className="flex h-8.75 min-w-29 items-center justify-center rounded-2xl bg-[#6B7280] px- text-sm text-white hover:bg-[#6b7280cc]"
               onClick={shareToKakao}
               type="button"
             >
@@ -204,10 +211,11 @@ export default function OutsoleResultPage() {
               Share
             </button>
             <Link
-              className="flex h-8.75 w-29 items-center justify-center rounded-2xl bg-[#1E7F4F] text-sm font-light text-white hover:bg-[#196e43]"
+              className="flex h-8.75 min-w-29 items-center justify-center rounded-2xl bg-[#1E7F4F] px-4 text-sm font-light text-white hover:bg-[#196e43]"
               href="/home"
             >
-              Go to Home
+              <House className="mr-1" size={15} />
+              Home
             </Link>
           </div>
         </div>
