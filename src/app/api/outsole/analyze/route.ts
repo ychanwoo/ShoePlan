@@ -1,7 +1,6 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { analyzeOutsoleImage } from "@/lib/outsoleModel";
 import { OutsoleAnalysisResult } from "@/lib/outsoleAnalysis";
 
 export const runtime = "nodejs";
@@ -61,6 +60,7 @@ export async function POST(req: Request) {
 
     const leftImageBuffer = Buffer.from(await leftImage.arrayBuffer());
     const rightImageBuffer = Buffer.from(await rightImage.arrayBuffer());
+    const { analyzeOutsoleImage } = await import("@/lib/outsoleModel");
     const [left, right] = await Promise.all([
       analyzeOutsoleImage(leftImageBuffer),
       analyzeOutsoleImage(rightImageBuffer),
