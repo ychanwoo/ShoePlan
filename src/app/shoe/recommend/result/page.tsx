@@ -123,14 +123,19 @@ export default function ResultPage() {
         integrity="sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4"
         crossOrigin="anonymous"
         onReady={() => {
-          if (window.Kakao && !window.Kakao.isInitialized()) {
-            const kakaoKey = process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY;
-            if (kakaoKey) {
-              window.Kakao.init(kakaoKey);
-              setIsKakaoLoaded(true);
-            } else {
-              console.error("환경변수에 카카오 JS 키가 없습니다.");
-            }
+          if (!window.Kakao) return;
+
+          if (window.Kakao.isInitialized()) {
+            setIsKakaoLoaded(true);
+            return;
+          }
+
+          const kakaoKey = process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY;
+          if (kakaoKey) {
+            window.Kakao.init(kakaoKey);
+            setIsKakaoLoaded(true);
+          } else {
+            console.error("환경변수에 카카오 JS 키가 없습니다.");
           }
         }}
       />

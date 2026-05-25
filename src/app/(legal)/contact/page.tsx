@@ -10,6 +10,9 @@ export default function ContactPage() {
       <div className="pt-8 px-5 h-[calc(100dvh-11vh)] overflow-y-auto pb-28 space-y-5">
         {/* 인사말 카드 */}
         <div className="bg-[#242E35] w-full mx-auto py-6 px-5 rounded-2xl shadow-lg text-center">
+          <p className="text-xs text-[#6B7280] mb-4">
+            최종 수정일: 2026년 5월 25일
+          </p>
           <div className="w-12 h-12 bg-[#1E7F4F]/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <MessageCircle className="text-[#1E7F4F] w-6 h-6" />
           </div>
