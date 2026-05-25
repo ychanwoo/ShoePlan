@@ -9,7 +9,7 @@ export default function PolicyPage() {
       <div className="pt-8 px-5 h-[calc(100dvh-11vh)] overflow-y-auto pb-28">
         <div className="bg-[#242E35] w-full mx-auto py-6 px-5 rounded-2xl shadow-lg mb-6">
           <p className="text-xs text-[#6B7280] mb-4">
-            최종 수정일: 2026년 3월 27일
+            최종 수정일: 2026년 5월 25일
           </p>
           <h2 className="text-2xl font-bold text-white mb-6 tracking-tight">
             개인정보 처리방침

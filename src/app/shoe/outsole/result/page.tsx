@@ -73,6 +73,9 @@ function FootResultCard({
         </div>
       </div>
       <p className="mt-5 text-sm leading-6 text-white">{copy.summary}</p>
+      <p className="mt-3 text-sm leading-6 text-[#2BE7A7]">
+        추천 유형: {copy.shoeType}
+      </p>
       <p className="mt-3 text-sm leading-6 text-[#CBD5E1]">
         {copy.recommendation}
       </p>
@@ -203,7 +206,7 @@ export default function OutsoleResultPage() {
 
           <div className="mx-auto flex w-full max-w-74 justify-between pt-2">
             <button
-              className="flex h-8.75 min-w-29 items-center justify-center rounded-2xl bg-[#6B7280] px- text-sm text-white hover:bg-[#6b7280cc]"
+              className="flex h-8.75 min-w-29 items-center justify-center rounded-2xl bg-[#6B7280] px-4 text-sm text-white hover:bg-[#6b7280cc]"
               onClick={shareToKakao}
               type="button"
             >
