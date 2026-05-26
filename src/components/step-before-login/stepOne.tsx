@@ -2,7 +2,7 @@
 
 import LogoImg from "@/assets/logo.svg";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { WheelEvent, useEffect, useRef, useState } from "react";
 import Picker from "react-mobile-picker";
 import { StepNavigationProps } from "@/types/StepNavigationProps";
 import NextBtn from "../button/NextBtn";
@@ -14,6 +14,7 @@ const weights = Array.from({ length: 101 }, (_, i) => i + 40); // 40~140
 
 export default function StepOnePage({ onNext }: StepNavigationProps) {
   const saved = getSurveyData();
+  const lastWheelAt = useRef(0);
 
   const [value, setValue] = useState({
     height: saved.height || 160,
@@ -45,6 +46,29 @@ export default function StepOnePage({ onNext }: StepNavigationProps) {
   const handleChange = (key: "height" | "weight", val: number) => {
     setValue((prev) => ({ ...prev, [key]: val }));
     setSurveyData({ [key]: val });
+  };
+
+  const handlePickerWheel = (
+    event: WheelEvent<HTMLDivElement>,
+    key: "height" | "weight",
+  ) => {
+    const now = Date.now();
+    if (now - lastWheelAt.current < 80) return;
+    lastWheelAt.current = now;
+
+    const options = key === "height" ? heights : weights;
+    const currentIndex = options.indexOf(value[key]);
+    if (currentIndex === -1) return;
+
+    const direction = event.deltaY > 0 ? 1 : -1;
+    const nextIndex = Math.min(
+      Math.max(currentIndex + direction, 0),
+      options.length - 1,
+    );
+
+    if (nextIndex !== currentIndex) {
+      handleChange(key, options[nextIndex]);
+    }
   };
 
   // * Bottom sheet 열릴 떄 body 스크롤 방지
@@ -129,18 +153,20 @@ export default function StepOnePage({ onNext }: StepNavigationProps) {
       {open && (
         <div className="fixed inset-0 bg-black/50 text-[#CBD5E1] flex items-end z-50 max-w-110 mx-auto overscroll-none">
           <div className="w-full bg-[#27323A] rounded-t-2xl p-6">
-            <Picker
-              value={{ [open]: value[open] }}
-              onChange={(v) => handleChange(open, Number(v[open]))}
-            >
-              <Picker.Column name={open}>
-                {(open === "height" ? heights : weights).map((n) => (
-                  <Picker.Item key={n} value={n}>
-                    {n}
-                  </Picker.Item>
-                ))}
-              </Picker.Column>
-            </Picker>
+            <div onWheel={(event) => handlePickerWheel(event, open)}>
+              <Picker
+                value={{ [open]: value[open] }}
+                onChange={(v) => handleChange(open, Number(v[open]))}
+              >
+                <Picker.Column name={open}>
+                  {(open === "height" ? heights : weights).map((n) => (
+                    <Picker.Item key={n} value={n}>
+                      {n}
+                    </Picker.Item>
+                  ))}
+                </Picker.Column>
+              </Picker>
+            </div>
 
             <button
               className="mt-6 w-full bg-white text-black py-3 rounded-xl hover:bg-[#ffffffcd]"
